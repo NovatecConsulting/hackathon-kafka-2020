@@ -51,7 +51,7 @@ If you would like to know more about the origin of Apache Kafka you should read 
 Some of the developers of Apache Kafke departed LinkedIn and founded Confluent, a company focused on Kafka [see https://engineering.linkedin.com/kafka/kafka-linkedin-current-and-future]. Today Confluent is still the main contributer to the Apache Kafka project. However, there is also a growing community which also contributes to Apache Kafka.
 
 Confluent offers the https://docs.confluent.io/5.3.2/platform.html[Confluent Platform], which on its core is based on the open source Apache Kafka. On top of that, the Confluent Platform encompases additional features which are developed by Confluent and not part of Apache Kafka itself.
-The Confluent Platform is available as Community and Enterprise Edition. The community edition contains additional tools for development, connectivity and data compatibility. The features of the community edition are also open source. However they are published under the so called _Confluent Community License Agreement_. This license is similar to the _Apache License 2.0_, but prohibits Cloud offerings which are based on them. 
+The Confluent Platform is available as Community and Enterprise Edition. The community edition contains additional tools for development, connectivity and data compatibility. The features of the community edition are also open source. However they are published under the so called _https://www.confluent.io/confluent-community-license-faq/[Confluent Community License Agreement]_. This license is similar to the _Apache License 2.0_, but prohibits Cloud offerings which are based on them. 
 
 .Confluent Platform Components
 image::https://docs.confluent.io/5.3.2/_images/confluentPlatform.png[Confluent Platform components]
