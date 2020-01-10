@@ -1,0 +1,34 @@
+:toc:
+:toc-title:
+:toclevels: 4
+
+= Novatec Kafka Hackathon
+
+== Overview
+
+In our Kafka Hackathon we would like to learn how to use Kafka and the Confluent Plattform, as well as for which use cases Kafka is suitable.
+
+Goals of our first Kafka Hackathon:
+
+- Getting to know the Confluent Platform
+- Getting to knwo how to develop with Kafka and the other Confluent libraries and tools
+
+== Confluent Platform
+
+== Hackathon Dev Environment
+
+What do we need?
+
+- Kubernetes config file to connect to Kubernetes cluster
+- Counfluent Cloud credentials (API Key)
+- Account on Docker Hub to use it as Docker registry for Kubernetes (https://hub.docker.com)
+- Account on GitHub to publish your code at https://github.com/NovatecConsulting/technologyconsulting-kafka-hackathon/tree/master/projects
+
+=== Kubernetes Cluster
+
+Tools:
+ 
+ - kubectl - Cli for Kubernetes (https://kubernetes.io/de/docs/tasks/tools/install-kubectl/)
+ - kubectx - Context switch between clusters (https://github.com/ahmetb/kubectx)
+
+=== Docker Registry

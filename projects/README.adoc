@@ -1,0 +1,3 @@
+= Kafka Hackathon Projects
+
+In this folder the custom team projects should be stored. Please start the name of your projects with your team name to make them easily distinguishable.

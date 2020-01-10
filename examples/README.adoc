@@ -1,0 +1,3 @@
+= Kafka Hackathon Exmaple Projects
+
+This folder contains examples which may be used as a template or as a foundation for a custom Hackathon project.
