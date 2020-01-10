@@ -6,14 +6,80 @@
 
 == Overview
 
-In our Kafka Hackathon we would like to learn how to use Kafka and the Confluent Plattform, as well as for which use cases Kafka is suitable.
+In our Kafka Hackathon we would like to learn how to use Apache Kafka and the Confluent Plattform (Community Edition), as well as for which use cases Apache Kafka is suitable.
 
 Goals of our first Kafka Hackathon:
 
-- Getting to know the Confluent Platform
-- Getting to knwo how to develop with Kafka and the other Confluent libraries and tools
+- Getting to know Apache Kafka and the Confluent Platform (Community Edition)
+- Getting to know how to use Kafka and the other Confluent libraries and tools during appplication development
 
-== Confluent Platform
+=== Apache Kafka
+
+Apache Kafka is described as a https://kafka.apache.org/documentation/#introduction[distributed streaming platform].
+Besides publish and subscribe it inherently supports the storage of streams of records in a fault-tolerant an permanent way.
+In addition it enables the processing of streams of records as they occur. These are the three key capabilities of Apache Kafka.
+A more detailed overview about Apache Kafka can be found at our https://www.novatec-gmbh.de/en/blog/kafka-101-series-part-1-introduction-to-kafka/[Kafka 101 Blog Series by Duy Hieu Vo].
+
+Apache Kafka itself is run as a cluster on one or more servers and consists of Kafka brokers and Zookeeper nodes.
+
+It has three core APIs with which developers can use to interact with a Kafka cluster:
+
+- The core Client API which consists of a https://kafka.apache.org/documentation.html#producerapi[Producer API] and https://kafka.apache.org/documentation.html#consumerapi[Consumer API], which allows an application to publish and subscribe streams of records.
+- The https://kafka.apache.org/documentation/streams[Streams API] allows an application to effectively transform streams of record and therfore basically provides the processing capability of Apache Kafka. An overview about Streaming and the Streams API can be found in the https://www.novatec-gmbh.de/en/blog/kafka-101-series-part-2-stream-processing-and-kafka-streams-api/[second blog post of our Kafka 101 Series].
+- The https://kafka.apache.org/documentation.html#connect[Connector API] allows building and running reusable producers or consumers that connect Kafka to existing applications or data systems.
+
+In addition, Apache Kafka includes a tool called https://kafka.apache.org/documentation/#basic_ops_mirror_maker[MirrorMaker] to copy streams of records from a source cluster into a target cluster. 
+The https://github.com/apache/kafka/blob/trunk/core/src/main/scala/kafka/tools/MirrorMaker.scala[first version of MirrorMaker] was based on the plain client API. In Apache Kafka 2.4 https://github.com/apache/kafka/tree/trunk/connect/mirror[MirrorMaker 2.0] was published, which leverages the Connect framework.
+
+Apache Kafka, including the three core APIs as well as MirrorMaker 1.0 and 2.0 is licensed under the _Apache License 2.0_ and can be found on https://github.com/apache/kafka[GitHub].
+
+The Apache Kafka project itself includes API implementations for Java and partially for Scala:
+
+- Client API: https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+- Streams API: https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams, https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams-scala
+- Connect API: https://mvnrepository.com/artifact/org.apache.kafka/connect-api
+
+The Kafka protocol is not standardized, but because it is open source, there are a lot of implementations for other languages.
+However, because it is a lot of work to implement the protocol, most of the implementations are based on _librdkafka_. 
+It is a C library implementation of the Apache Kafka protocol, providing Producer, Consumer and Admin client. _librdkafka_ can be found on https://github.com/edenhill/librdkafka[GitHub] and is licensed under the _2-clause BSD license_.
+
+=== Confluent Platform
+
+Apache Kafka has been developed and built by the LinkedIn engineering team in order to serve as a central data hub that helps the company’s applications work together in a loosely coupled manner.
+If you would like to know more about the origin of Apache Kafka you should read the the https://www.confluent.io/blog/event-streaming-platform-1/[blog post about building an event streaming platform by Jay Kreps, the CEO of Confluent]. You may also read https://engineering.linkedin.com/architecture/brief-history-scaling-linkedin[A Brief History of Scaling LinkedIn] which briefly describes the architectural changes at LinkedIn over time. 
+
+Some of the developers of Apache Kafke departed LinkedIn and founded Confluent, a company focused on Kafka [see https://engineering.linkedin.com/kafka/kafka-linkedin-current-and-future]. Today Confluent is still the main contributer to the Apache Kafka project. However, there is also a growing community which also contributes to Apache Kafka.
+
+Confluent offers the https://docs.confluent.io/5.3.2/platform.html[Confluent Platform], which on its core is based on the open source Apache Kafka. On top of that, the Confluent Platform encompases additional features which are developed by Confluent and not part of Apache Kafka itself.
+The Confluent Platform is available as Community and Enterprise Edition. The community edition contains additional tools for development, connectivity and data compatibility. The features of the community edition are also open source. However they are published under the so called _Confluent Community License Agreement_. This license is similar to the _Apache License 2.0_, but prohibits Cloud offerings which are based on them. 
+
+.Confluent Platform Components
+image::https://docs.confluent.io/5.3.2/_images/confluentPlatform.png[Confluent Platform components]
+
+The https://docs.confluent.io/5.3.2/platform.html#community-features[community features] of the Confluent Platform are:
+
+- https://ksqldb.io/[Confluent KSqlDB]: A streaming SQL engine for Apache Kafka, which provides an easy-to-use interactive SQL interface for stream processing on Apache Kafka, without the need to write code in a programming language such as Java. Confluent KSqlDB can be found on https://github.com/confluentinc/ksql[GitHub].
+- https://docs.confluent.io/5.3.2/connect/managing/index.html#connect-managing[Confluent Connectors]: Connectors leverage the Kafka Connect API to connect Apache Kafka to other data systems. Confluent Platform provides connectors for the most popular data sources and sinks. At the https://www.confluent.io/hub/[Confluent Hub] you can find a lot of exitsing Connectors. On https://github.com/confluentinc?utf8=%E2%9C%93&q=connect&type=&language=[GitHub] the source code of the community Connectors is published.
+- https://docs.confluent.io/5.3.2/clients/index.html#kafka-clients[Confluent Clients]: Besides Java clients, which are part of Apache Kafka, the Confluent Platform also provides clients for https://github.com/edenhill/librdkafka[C/C+\+], https://github.com/confluentinc/confluent-kafka-go/[Go], https://github.com/confluentinc/confluent-kafka-python[Python] and https://github.com/confluentinc/confluent-kafka-dotnet[.Net]. However, you have to consider, that they not fully support all Kafka features (https://docs.confluent.io/5.3.2/clients/index.html#feature-support[Supported Features]).
+The C/C++ client is a implementation of the Apache Kafka protocol, providing Producer, Consumer and Admin client. It is called _librdkafka_ and licensed under the _2-clause BSD license_. The other clients are built on top of _librdkafka_ and published under the _Apache License 2.0_. Besides these client libraries there are many others which just are not provided directly as part of Confluent Platform (https://github.com/edenhill/librdkafka#language-bindings[Language Bindings]).
+- https://docs.confluent.io/5.3.2/kafka-rest/index.html#kafkarest-intro[Confluent Rest Proxy]: Provides a RESTful interface to a Kafka cluster. It makes it easy to produce and consume messages, view the state of the cluster, and perform administrative actions without using the native Kafka protocol or clients. Confluent Rest Proxy can be found on https://github.com/confluentinc/kafka-rest[GitHub].
+- https://docs.confluent.io/5.3.2/schema-registry/index.html#schemaregistry-intro[Confluent Schema Registry]: Enables evolution of schemas by centralizing the management of schemas written for the Avro serialization system. It provides a RESTful interface for storing and retrieving Avro schemas. It stores a versioned history of all schemas, provides multiple compatibility settings and allows evolution of schemas according to the configured compatibility setting. Schema Registry can be found on https://github.com/confluentinc/schema-registry[GitHub]. 
+
+The enterprise edition of the Confluent Plattform additionaly encompases https://docs.confluent.io/5.3.2/platform.html#commercial-features[commercial features] for operations, management and monitoring:
+
+- Support 24x7x365
+- https://docs.confluent.io/5.3.2/control-center/index.html#control-center[Confluent Control Center]: Web-based tool for managing and monitoring Apache Kafka.
+- https://docs.confluent.io/5.3.2/connect/kafka-connect-replicator/index.html#connect-replicator[Confluent Replication]: Replicates topics between Apache Kafka cluster. This is the enterprise variant of the MirrorMaker, which is open source. 
+- https://docs.confluent.io/5.3.2/installation/operator/index.html#operator-about-intro[Confluent Operator]: Kubernetes operater that deploys and manages Confluent Platform as a stateful container application on Kubernetes. 
+- https://docs.confluent.io/5.3.2/kafka/rebalancer/rebalancer.html#rebalancer[Confluent Auto Data Balancer]: Balances data so that the number of leaders and disk usage are even across brokers and racks.
+- https://docs.confluent.io/current/control-center/installation/licenses.html#enterprise-connectors-lm[Confluent Connectors]: Besides the community Connectors, there are also enterprise connectors which require a enterprise license.
+- https://docs.confluent.io/5.3.2/kafka-mqtt/index.html#mqtt-proxy[Confluent MQTT Proxy]: Scalable interface that allows MQTT clients to produce messages to Apache Kafka
+- https://docs.confluent.io/5.3.2/clients/kafka-jms-client/index.html#client-jms[Confluent JMS Client]: Allows Apache Kafka to be used as a JMS message broker.
+- https://docs.confluent.io/5.3.2/confluent-security-plugins/index.html#confluentsecurityplugins-introduction[Confluent Security Plugins]: Enable pass through client credentials from REST Proxy and Schema Registry to Kafka broker.
+- https://docs.confluent.io/5.3.2/security/ldap-authorizer/introduction.html[Confluent LDAP Authorizer]: Map AD and LDAP groups to Kafka ACLs.
+- https://docs.confluent.io/5.3.2/security/rbac/index.html[Role-Based Access Control]: Provides secure authorization of access to resources by users and groups
+
+The enterprise edition requires a license. The availables types are described at https://docs.confluent.io/5.3.2/control-center/installation/licenses.html.
 
 == Hackathon Dev Environment
 
