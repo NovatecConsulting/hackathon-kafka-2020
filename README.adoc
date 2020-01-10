@@ -35,9 +35,9 @@ Apache Kafka, including the three core APIs as well as MirrorMaker 1.0 and 2.0 i
 
 The Apache Kafka project itself includes API implementations for Java and partially for Scala:
 
-- Client API: https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
-- Streams API: https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams, https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams-scala
-- Connect API: https://mvnrepository.com/artifact/org.apache.kafka/connect-api
+- Client API: https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients[Java]
+- Streams API: https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams[Java], https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams-scala[Scala]
+- Connect API: https://mvnrepository.com/artifact/org.apache.kafka/connect-api[Java]
 
 The Kafka protocol is not standardized, but because it is open source, there are a lot of implementations for other languages.
 However, because it is a lot of work to implement the protocol, most of the implementations are based on _librdkafka_. 
