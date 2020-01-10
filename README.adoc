@@ -2,7 +2,7 @@
 :toc-title:
 :toclevels: 4
 
-= Novatec Kafka Hackathon
+= Novatec Kafka Hackathon (WIP)
 
 == Overview
 
