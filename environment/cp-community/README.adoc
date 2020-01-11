@@ -123,7 +123,7 @@ In order to use the Confluent Schema Registry in your application use the serial
 |===
 
 [cols="h,1"]
-.Access to services within Docker entwork
+.Access to services within Docker network
 |===
 | Kafka Bootstrap Servers |  kafka:9092
 | Schema Registry Urls | http://schemaregistry:8081
