@@ -20,8 +20,8 @@ Additionally it encompases Prometheus and Grafana as monitoring tools.
 To start this environment, the following is required:
 
 - Bash (for Windows use https://docs.microsoft.com/de-de/windows/wsl/install-win10[WSL] or https://cygwin.com/install.html[Cygwin])
-- Docker (https://docs.docker.com/install/#server)
-- Docker-Compose (https://docs.docker.com/compose/install/)
+- https://docs.docker.com/install/#server[Docker] (https://docs.microsoft.com/de-de/archive/blogs/stevelasker/configuring-docker-for-windows-volumes[in Windows volume mounts must be enabled])
+- https://docs.docker.com/compose/install/[Docker-Compose]
 
 == Quick Start
 
