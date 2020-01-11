@@ -45,17 +45,70 @@ To start this environment, the following is required:
 Hint: _link:docker-run.sh[]_ is just a convenient script, which attaches the Docker network to the _docker run_ command. You may also execute _docker run --rm -it --net host confluentinc/cp-kafka:5.3.2 --bootstrap-server localhost:19092 ..._
 
 === Kafka commands
+
+.Create and delete topics
 ----
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka1:9092 --create --topic test --partitions 6 --replication-factor 3
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka1:9092 --describe
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka1:9092 --delete --topic test
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-console-producer --broker-list kafka1:9092 --property "parse.key=true" --property "key.separator=:" --topic test
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-console-consumer --bootstrap-server kafka1:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test
+./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka:9092 --create --topic test --partitions 6 --replication-factor 3
+./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka:9092 --describe
+./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka:9092 --delete --topic test
+----
+
+.Produce records
+----
+./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-console-producer --broker-list kafka:9092 --property "parse.key=true" --property "key.separator=:" --topic test
+----
+
+.Once started, you can insert records
+----
+mykey:myvalue
+anotherkey:somevalue
+----
+
+.Consume records
+----
+./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-console-consumer --bootstrap-server kafka:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test
 ----
 
 === Schema Registry commands
+
+With the Confluent Schema Registry it is possible to produce and consume records with a Avro schema.
+To find out how it works visit https://docs.confluent.io/5.3.2/schema-registry/index.html.
+
+.Produce records
 ----
-./docker-run.sh confluentinc/cp-schema-registry:5.3.2 kafka-avro-console-producer
+./docker-run.sh confluentinc/cp-schema-registry:5.3.2 kafka-avro-console-producer --broker-list kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --topic testavro --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
+----
+
+.Once started, you can insert records
+----
+{"f1": "value1"}
+{"f1": "value2"}
+{"f1": "value3"}
+----
+
+.Consume records
+----
+./docker-run.sh confluentinc/cp-schema-registry:5.3.2 kafka-avro-console-consumer --bootstrap-server kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --from-beginning --topic testavro
+----
+
+It is also possible to directly interact with the Confluent Schema Registry via the Rest API.
+The API is described at https://docs.confluent.io/5.3.2/schema-registry/develop/api.html.
+
+.Register a schema for a subject
+----
+subject=mysubject
+schema={"schema":"{\"type\":\"record\",\"name\":\"myschema\",\"namespace\":\"this.is.a.test\",\"fields\":[{\"name\":\"field\",\"type\":\"string\"}]}"}
+./docker-run.sh dwdraju/alpine-curl-jq curl -s -XPOST -H "Content-Type: application/vnd.schemaregistry.v1+json" -H "Accept: application/vnd.schemaregistry.v1+json" --data "${schema}" http://schemaregistry:8081/subjects/${subject}/versions
+----
+
+.Show subjects
+----
+./docker-run.sh dwdraju/alpine-curl-jq curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/subjects
+----
+
+.Get a schema by id
+----
+./docker-run.sh dwdraju/alpine-curl-jq curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/schemas/ids/2
 ----
 
 == Network and Credentials
