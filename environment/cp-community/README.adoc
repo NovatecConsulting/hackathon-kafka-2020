@@ -111,6 +111,8 @@ schema={"schema":"{\"type\":\"record\",\"name\":\"myschema\",\"namespace\":\"thi
 ./docker-run.sh dwdraju/alpine-curl-jq curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/schemas/ids/2
 ----
 
+In order to use the Confluent Schema Registry in your application use the serializer and deserializer from the artifacts _io.confluent:kafka-avro-serializer_ and _io.confluent:kafka-streams-avro-serde_.
+
 == Network and Credentials
 
 [options="header"]
