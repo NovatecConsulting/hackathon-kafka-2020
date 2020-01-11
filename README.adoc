@@ -97,7 +97,7 @@ The enterprise edition requires a license. The availables types are described at
 
 ==== Download and Usage
 
-The current version of the Confluent Platform is 5.3.2. How to manually download and install the platfor mis decsribed at https://docs.confluent.io/5.3.2/installation/installing_cp/zip-tar.html.
+The current version of the Confluent Platform is 5.3.2. How to manually download and install the platform is decsribed at https://docs.confluent.io/5.3.2/installation/installing_cp/zip-tar.html.
 
 [cols="h,1"]
 .Download
