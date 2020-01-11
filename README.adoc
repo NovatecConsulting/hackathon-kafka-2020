@@ -90,7 +90,8 @@ For the Hackathon, two different environemts are provided:
 
 === Local Environment
 
-Details about local environment at link:environment/cp-community/README.adoc[]
+Local environment with Confluent Platform Community Edition is located at link:environment/cp-community[].
+Detailed information about the environment can be found at link:environment/cp-community/README.adoc[]
 
 === Cloud Enviornment
 
