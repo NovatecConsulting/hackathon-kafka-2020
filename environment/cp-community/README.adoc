@@ -40,7 +40,11 @@ To start this environment, the following is required:
 ./down.sh
 ----
 
-== Example Kafka commands
+== Examples
+
+Hint: _link:docker-run.sh[]_ is just a convenient script, which attaches the Docker network to the _docker run_ command. You may also execute _docker run --rm -it --net host confluentinc/cp-kafka:5.3.2 --bootstrap-server localhost:19092 ..._
+
+=== Kafka commands
 ----
 ./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka1:9092 --create --topic test --partitions 6 --replication-factor 3
 ./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka1:9092 --describe
@@ -49,7 +53,10 @@ To start this environment, the following is required:
 ./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-console-consumer --bootstrap-server kafka1:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test
 ----
 
-Hint: _link:docker-run.sh[]_ is just a convinient script, which attaches the docker network to the _docker run_ command. You may also execute _docker run --rm -it --net host confluentinc/cp-kafka:5.3.2 --bootstrap-server localhost:19092 ..._
+=== Schema Registry commands
+----
+./docker-run.sh confluentinc/cp-schema-registry:5.3.2 kafka-avro-console-producer
+----
 
 == Network and Credentials
 

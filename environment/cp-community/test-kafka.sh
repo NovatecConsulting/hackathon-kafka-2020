@@ -6,9 +6,7 @@ source ./docker-run.sh
 source ./env.sh
 popd > /dev/null
 
-KAFKA_HOST="kafka"
-KAFKA_PORT="9092"
-BOOTSTRAP_SERVER="kafka:9092"
+BOOTSTRAP_SERVER="kafka1:9092,kafka2:9092,kafka3:9092"
 REPLICATION_FACTOR=3
 
 function log() {
@@ -27,7 +25,12 @@ function run_cmd () {
 
 function wait_until_kafka_started () {
     log "INFO" "Waiting until Kafka is launched"
-    run_cmd bash -c "while ! nc -z ${KAFKA_HOST} ${KAFKA_PORT}; do sleep 0.1; done"
+    IFS_ORIG=$IFS
+    IFS=','
+    for host in $BOOTSTRAP_SERVER; do
+        run_cmd bash -c "h=\$(echo $host | cut -f1 -d':'); p=\$(echo $host | cut -f2 -d':'); while ! nc -z \${h} \${p}; do sleep 0.1; done"
+    done
+    IFS=$IFS_ORIG
 }
 
 function createTopic() {
