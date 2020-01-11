@@ -66,6 +66,10 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_JMX_PORT: 19999
       KAFKA_JMX_HOSTNAME: kafka1
+    networks:
+      default:
+        aliases:
+          - kafka
   kafka1-prometheus:
     build:
       context: ./images/jmx-prometheus-exporter/
@@ -107,6 +111,10 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_JMX_PORT: 29999
       KAFKA_JMX_HOSTNAME: kafka2
+    networks:
+      default:
+        aliases:
+          - kafka
   kafka2-prometheus:
     build:
       context: ./images/jmx-prometheus-exporter/
@@ -147,7 +155,11 @@ services:
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_JMX_PORT: 39999
-      KAFKA_JMX_HOSTNAME: kafka3   
+      KAFKA_JMX_HOSTNAME: kafka3
+    networks:
+      default:
+        aliases:
+          - kafka
   kafka3-prometheus:
     build:
       context: ./images/jmx-prometheus-exporter/

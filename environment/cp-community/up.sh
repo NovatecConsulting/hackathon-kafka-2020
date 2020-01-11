@@ -3,19 +3,22 @@ set -e
 pushd . > /dev/null
 cd $(dirname ${BASH_SOURCE[0]})
 CWD_COMPOSE=$(pwd)
+source ./up-monitoring.sh
 source ./up-kafka.sh
 source ./test-kafka.sh
-source ./up-monitoring.sh
+source ./up-schemaregistry.sh
+source ./test-schemaregistry.sh
 source ./ips.sh
 popd > /dev/null
 
 MONITORING=false
 KAFKA=false
+SCHEMAREGISTRY=false
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--with-monitoring] all kafka schema-registry connect ksqldb"
+    echo "Usage: $0 [--with-monitoring] all kafka schemaregistry connect ksqldb"
     echo
     return 1
 }
@@ -31,11 +34,17 @@ function parseCmd () {
             all)
                 any_selected=true
                 KAFKA=true
+                SCHEMAREGISTRY=true
                 shift
                 ;;
             kafka)
                 any_selected=true
                 KAFKA=true
+                shift
+                ;;
+            schemaregistry)
+                any_selected=true
+                SCHEMAREGISTRY=true
                 shift
                 ;;
             *)
@@ -71,8 +80,12 @@ function main () {
 
     if [ "$KAFKA" = true ]; then
         start_kafka ${MONITORING}
-        sleep 5
         test_kafka
+    fi
+
+    if [ "$SCHEMAREGISTRY" = true ]; then
+        start_schemaregistry
+        test_schemaregistry
     fi
 
     echo -e "\n"

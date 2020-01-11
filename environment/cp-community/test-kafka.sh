@@ -6,7 +6,9 @@ source ./docker-run.sh
 source ./env.sh
 popd > /dev/null
 
-BOOTSTRAP_SERVER="kafka1:9092,kafka2:9092,kafka3:9092"
+KAFKA_HOST="kafka"
+KAFKA_PORT="9092"
+BOOTSTRAP_SERVER="kafka:9092"
 REPLICATION_FACTOR=3
 
 function log() {
@@ -16,7 +18,16 @@ function log() {
 }
 
 function run_kafka_cmd () {
-    docker_run confluentinc/cp-kafka:${VERSION_CONFLUENT} $@
+    docker_run confluentinc/cp-kafka:${VERSION_CONFLUENT} "$@"
+}
+
+function run_cmd () {
+    docker_run dwdraju/alpine-curl-jq "$@"
+}
+
+function wait_until_kafka_started () {
+    log "INFO" "Waiting until Kafka is launched"
+    run_cmd bash -c "while ! nc -z ${KAFKA_HOST} ${KAFKA_PORT}; do sleep 0.1; done"
 }
 
 function createTopic() {
@@ -60,8 +71,12 @@ function test_kafka_throughput () {
 }
 
 function test_kafka () {
+    wait_until_kafka_started
     test_kafka_latency
+    local returnCode_test_latency=$?
     test_kafka_throughput
+    local returnCode_test_throughput=$?
+    return $(($returnCode_test_latency + $returnCode_test_throughput))
 }
 
 if [ "${BASH_SOURCE[0]}" == "$0" ]; then

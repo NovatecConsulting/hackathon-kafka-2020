@@ -1,0 +1,55 @@
+---
+version: '2'
+services:
+  #see https://docs.confluent.io/current/schema-registry/installation/config.html
+  schemaregistry1:
+    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: schemaregistry1
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3  
+    ports:
+      - "18081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: "schemaregistry1"
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka:9092"
+      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: "full_transitive"
+      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true"
+      # The group id of the KafkaStore consumer. Important when security is enabled. 
+      #SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID: ""
+      # Identifies schema registry cluster, in which each cluster can haf it's own master. 
+      # Different clustery must have a distinct kafkastore.topic if master.eligibility is set to true.
+      #SCHEMA_REGISTRY_SCHEMA_REGISTRY_GROUP_ID: ""
+      #SCHEMA_REGISTRY_KAFKASTORE_TOPIC: "_schemas"
+    networks:
+      default:
+        aliases:
+          - schemaregistry
+
+  schemaregistry2:
+    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: schemaregistry2
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3  
+    ports:
+      - "28081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: "schemaregistry2"
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka:9092"
+      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: "full_transitive"
+      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true"
+      # The group id of the KafkaStore consumer. Important when security is enabled. 
+      #SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID: ""
+      # Identifies schema registry cluster, in which each cluster can haf it's own master. 
+      # Different clustery must have a distinct kafkastore.topic if master.eligibility is set to true.
+      #SCHEMA_REGISTRY_SCHEMA_REGISTRY_GROUP_ID: ""
+      #SCHEMA_REGISTRY_KAFKASTORE_TOPIC: "_schemas"
+    networks:
+      default:
+        aliases:
+          - schemaregistry

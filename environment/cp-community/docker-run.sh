@@ -6,7 +6,7 @@ source ./env.sh
 popd > /dev/null
 
 function docker_run () {
-    docker run --rm -it --net ${PROJECT_NETWORK} $@
+    docker run --rm -it --net ${PROJECT_NETWORK} "$@"
 }
 
 if [ "${BASH_SOURCE[0]}" == "$0" ]; then
