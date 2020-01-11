@@ -6,11 +6,11 @@
 
 == Overview
 
-In our Kafka Hackathon we would like to learn how to use Apache Kafka and the Confluent Plattform (Community Edition), as well as for which use cases Apache Kafka is suitable.
+In our Kafka Hackathon we would like to learn how to use Apache Kafka and the Confluent Plattform, as well as for which use cases Apache Kafka is suitable.
 
 Goals of our first Kafka Hackathon:
 
-- Getting to know Apache Kafka and the Confluent Platform (Community Edition)
+- Getting to know Apache Kafka and the Confluent Platform
 - Getting to know how to use Kafka and the other Confluent libraries and tools during appplication development
 
 === Apache Kafka
@@ -81,7 +81,18 @@ The enterprise edition of the Confluent Plattform additionaly encompases https:/
 
 The enterprise edition requires a license. The availables types are described at https://docs.confluent.io/5.3.2/control-center/installation/licenses.html.
 
-== Hackathon Dev Environment
+== Hackathon Development Environment
+
+For the Hackathon, two different environemts are provided:
+
+- Local environment with Confluent Platform Community Edition running in Docker
+- Cloud environment with Confluent Cloud
+
+=== Local Environment
+
+Details about local environment at link:environment/cp-community/README.adoc[]
+
+=== Cloud Enviornment
 
 What do we need?
 
@@ -90,11 +101,11 @@ What do we need?
 - Account on Docker Hub to use it as Docker registry for Kubernetes (https://hub.docker.com)
 - Account on GitHub to publish your code at https://github.com/NovatecConsulting/technologyconsulting-kafka-hackathon/tree/master/projects
 
-=== Kubernetes Cluster
+==== Kubernetes Cluster
 
 Tools:
  
  - kubectl - Cli for Kubernetes (https://kubernetes.io/de/docs/tasks/tools/install-kubectl/)
  - kubectx - Context switch between clusters (https://github.com/ahmetb/kubectx)
 
-=== Docker Registry
+==== Docker Registry
