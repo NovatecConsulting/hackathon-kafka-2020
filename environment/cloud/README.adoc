@@ -1,0 +1,21 @@
+:toc:
+:toc-title:
+:toclevels: 4
+
+= Confluent Cloud Environment
+
+What do we need?
+
+- Kubernetes config file to connect to Kubernetes cluster
+- Counfluent Cloud credentials (API Key)
+- Account on Docker Hub to use it as Docker registry for Kubernetes (https://hub.docker.com)
+- Account on GitHub to publish your code at https://github.com/NovatecConsulting/technologyconsulting-kafka-hackathon/tree/master/projects
+
+==== Kubernetes Cluster
+
+Tools:
+ 
+ - kubectl - Cli for Kubernetes (https://kubernetes.io/de/docs/tasks/tools/install-kubectl/)
+ - kubectx - Context switch between clusters (https://github.com/ahmetb/kubectx)
+
+==== Docker Registry
