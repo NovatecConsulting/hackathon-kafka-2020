@@ -53,8 +53,8 @@ services:
       - zookeeper3
     ports:
       - "19092:19092"
-      - "19999:19999"
     environment:
+      # The broker id uniquely identifies a Kafka broker instance
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
@@ -64,7 +64,7 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
       KAFKA_MIN_INSYNC_REPLICAS: 2
-      KAFKA_JMX_PORT: 19999
+      KAFKA_JMX_PORT: 9999
       KAFKA_JMX_HOSTNAME: kafka1
     networks:
       default:
@@ -84,7 +84,7 @@ services:
       - "19404:19404"
     environment:
       EXPORTER_PORT: 19404
-      HOST_PORT: kafka1:19999
+      HOST_PORT: kafka1:9999
     volumes:
       - ./configs/kafka-prometheus/rules.yaml:/etc/jmx-prometheus-exporter/rules.yaml
 
@@ -98,7 +98,6 @@ services:
       - zookeeper3
     ports:
       - "29092:29092"
-      - "29999:29999"
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
@@ -109,7 +108,7 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
       KAFKA_MIN_INSYNC_REPLICAS: 2
-      KAFKA_JMX_PORT: 29999
+      KAFKA_JMX_PORT: 9999
       KAFKA_JMX_HOSTNAME: kafka2
     networks:
       default:
@@ -129,7 +128,7 @@ services:
         - "29404:29404"
     environment:
         EXPORTER_PORT: 29404
-        HOST_PORT: kafka2:29999
+        HOST_PORT: kafka2:9999
     volumes:
         - ./configs/kafka-prometheus/rules.yaml:/etc/jmx-prometheus-exporter/rules.yaml
 
@@ -143,7 +142,6 @@ services:
       - zookeeper3
     ports:
       - "39092:39092"
-      - "39999:39999"
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
@@ -154,7 +152,7 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
       KAFKA_MIN_INSYNC_REPLICAS: 2
-      KAFKA_JMX_PORT: 39999
+      KAFKA_JMX_PORT: 9999
       KAFKA_JMX_HOSTNAME: kafka3
     networks:
       default:
@@ -174,6 +172,6 @@ services:
         - "39404:39404"
     environment:
         EXPORTER_PORT: 39404
-        HOST_PORT: kafka3:39999
+        HOST_PORT: kafka3:9999
     volumes:
         - ./configs/kafka-prometheus/rules.yaml:/etc/jmx-prometheus-exporter/rules.yaml
