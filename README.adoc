@@ -157,9 +157,9 @@ In addition, Confluent Cloud is really a fully managed service, and does not req
 Confluent Cloud is based on Apache Kafka, however it is not 100% identical to Apache Kafka or the Confluent Platform. The Confluent Cloud may for example miss features which are already available in the downloadable version. Which features are supported is described in the https://docs.confluent.io/current/cloud/release-notes.html[Confluent Cloud Release Notes]. The Confluent Cloud releases have also there own version schema. During writing, the latest version was _December 20, 2019_.
 However, Confluent says that everything is based on open source components and that it is possible to recreate everything outside of Confluent Cloud (see https://docs.confluent.io/current/cloud/index.html#features[basic features]). For detailed information about supported features, see https://docs.confluent.io/current/cloud/limits.html[Confluent Cloud Supported Features and Limits].
 
-Confluent Cloud supports the creation of Kafka Clusters on GCP, AWS and Azure clouds (see https://www.confluent.io/confluent-cloud/compare/).
+Confluent Cloud supports the creation of Kafka clusters on GCP, AWS and Azure clouds (see https://www.confluent.io/confluent-cloud/compare/).
 
-The Kafka cluster created in the standard Confluent Cloud are basically virtual Cluster, which are physically shared with other tenants.
+The Kafka cluster created in the standard Confluent Cloud are basically virtual clusters, which are physically shared with other tenants.
 For mission-critical apps, Confluent has also an enterprise offering at which a deticated Confluent Cloud environment with deticated Kafka clusters is provided. It is not possible to create an deticated Kafka Cluster via Confluent Cloud. To do this you have to get in contact with Confluent.
 
 To get in touch with Confluent Cloud, the https://docs.confluent.io/current/quickstart/cloud-quickstart/index.html[Confluent Cloud Quick Start] is a good starting point.
