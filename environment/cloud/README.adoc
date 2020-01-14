@@ -2,20 +2,39 @@
 :toc-title:
 :toclevels: 4
 
+:sectanchors:
+:sectlinks:
+
 = Confluent Cloud Environment
 
-What do we need?
+== Prerequisite
 
-- Kubernetes config file to connect to Kubernetes cluster
-- Counfluent Cloud credentials (API Key)
-- Account on Docker Hub to use it as Docker registry for Kubernetes (https://hub.docker.com)
-- Account on GitHub to publish your code at https://github.com/NovatecConsulting/technologyconsulting-kafka-hackathon/tree/master/projects
+== Confluent Cloud
 
-==== Kubernetes Cluster
+=== Confluent Cloud API Key and Secret to get access to Kafka cluster
 
-Tools:
- 
- - kubectl - Cli for Kubernetes (https://kubernetes.io/de/docs/tasks/tools/install-kubectl/)
- - kubectx - Context switch between clusters (https://github.com/ahmetb/kubectx)
+It is recommendet to use the provided API Key and Secret to use the alreade prepared Confluent Cloud Kafka cluster. The advantage of having a shared Kafka cluster for our Hackathon is, that we can easily share the data. 
 
-==== Docker Registry
+Alternatively you can create your own account on https://confluent.cloud/.
+
+=== Confluent Cloud CLI Installation
+
+To administrate a Confluent Cloud cluster you can use the Confluent Cloud CLI.
+
+.Run this command to install the Confluent Cloud CLI
+[source,bash]
+----
+curl -L https://cnfl.io/ccloud-cli | sh -s -- -b ~/.local/bin
+----
+
+For more information about Confluent Cloud CLI installation, see https://docs.confluent.io/current/cloud/cli/install.html.
+
+=== Confluent Cloud Login and First Steps
+
+For detailed information see https://docs.confluent.io/current/cloud/cli/install.html#next-steps.
+
+.Run this command to log in to your Confluent Cloud cluster.
+[source,bash]
+----
+ccloud login
+----
