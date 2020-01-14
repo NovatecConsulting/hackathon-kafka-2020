@@ -5,24 +5,29 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     # Install tools
     && apt-get -y install --no-install-recommends \
-        procps curl wget telnet dnsutils vim less git bash-completion \
+        procps curl wget telnet dnsutils ca-certificates vim less git bash-completion \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 ENV DEBIAN_FRONTEND=dialog
 
+# Enable bash completion
+RUN echo "source /etc/profile.d/bash_completion.sh" >> ~/.bashrc
+
 # Install Confluent Cloud CLI (ccloud)
 # https://docs.confluent.io/current/cloud/cli/install.html
-ARG CCLOUD_VERSION=0.218.0
-RUN curl -L https://cnfl.io/ccloud-cli | sh -s -- -b /usr/local/bin ${CCLOUD_VERSION}
-RUN ccloud completion bash >> /etc/profile.d/ccloud_completion
+RUN curl -L https://cnfl.io/ccloud-cli | sh -s -- -b /usr/local/bin
+RUN ccloud completion bash >> ~/.ccloud_completion \
+    && echo "source ~/.ccloud_completion" >> ~/.bashrc
 
 # Install Kubernetes CLI (kubectl)
 # https://kubernetes.io/de/docs/tasks/tools/install-kubectl/
 ARG KUBECTL_VERSION=v1.17.0
 RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
     && chmod +x /usr/local/bin/kubectl
+RUN kubectl completion bash >> ~/.kubectl_completion \
+    && echo "source ~/.kubectl_completion" >> ~/.bashrc
 
 # Install Kubernetes cluster and namespace manager (kubectx and kubens)
 # https://github.com/ahmetb/kubectx/
@@ -31,6 +36,10 @@ RUN curl -L -o /usr/local/bin/kubectx https://raw.githubusercontent.com/ahmetb/k
     && chmod +x /usr/local/bin/kubectx \
     && curl -L -o /usr/local/bin/kubens https://raw.githubusercontent.com/ahmetb/kubectx/${KUBECTX_VERSION}/kubens \
     && chmod +x /usr/local/bin/kubens
+RUN curl -L -o ~/.kubectx_completion https://raw.githubusercontent.com/ahmetb/kubectx/v0.7.1/completion/kubectx.bash \
+    && echo "source ~/.kubectx_completion" >> ~/.bashrc \
+    && curl -L -o ~/.kubens_completion https://raw.githubusercontent.com/ahmetb/kubectx/v0.7.1/completion/kubens.bash \
+    && echo "source ~/.kubens_completion" >> ~/.bashrc
 
 # Install pid1 init daemon
 ARG PID1_VERSION=0.1.2.0

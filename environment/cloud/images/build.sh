@@ -4,7 +4,6 @@ pushd . > /dev/null
 cd $(dirname ${BASH_SOURCE[0]})
 SCRIPT_DIR=$(pwd)
 GIT_REPO_URL=$(git config --get remote.origin.url | sed 's/:/\//' | sed 's/\.git//' | sed 's/git@/https\:\/\//')
-#GIT_RELATIVE_DIR=$(realpath --relative-to=$(git rev-parse --show-toplevel) $(pwd))
 GIT_ROOT_DIR=$(git rev-parse --show-toplevel)
 popd > /dev/null
 
@@ -51,7 +50,7 @@ function parseCmd () {
         usage "Requires directory"
         return $?
     fi
-    if [ ! -f "${DOCKERFILE_DIR}/Dockerfile" ]; then 
+    if [ ! -f "${SCRIPT_DIR}/${DOCKERFILE_DIR}/Dockerfile" ]; then 
         usage "Missing Dockerfile: ${DOCKERFILE_DIR}/Dockerfile"
     fi
     return 0
@@ -65,7 +64,7 @@ function resolveCommit () {
 }
 
 function resolveBuildTimestamp() {
-    local created=$(docker inspect --format "{{ index .Created }}" "${DOCKERIMAGE_REPO}:${DOCKERFILE_DIR}")
+    local created=$(docker inspect --format "{{ index .Created }}" "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:latest")
     date --utc -d "${created}" +'%Y%m%dT%H%M%Z'
 }
 
@@ -73,7 +72,7 @@ function resolveImageLabel () {
     local label=${1:-"Missing label name as first parameter!"}
     docker inspect \
         --format "{{ index .Config.Labels \"${label}\"}}" \
-        "${DOCKERIMAGE_REPO}:${DOCKERFILE_DIR}"
+        "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:latest"
 }
 
 function resolveImageTags () {
@@ -86,7 +85,7 @@ function build () {
     local commit=$(resolveCommit)
     local dockerfileDirAbsolutePath=${SCRIPT_DIR}/${DOCKERFILE_DIR}
     local dockerfileAbsolutePath=${SCRIPT_DIR}/${DOCKERFILE_DIR}/Dockerfile
-    local dockerfileUrl=${GITHUB_REPO_URL}/blob/${commit}/$(realpath --relative-to=${GIT_ROOT_DIR} ${dockerfileAbsolutePath})
+    local dockerfileUrl=${GIT_REPO_URL}/blob/${commit}/$(realpath --relative-to=${GIT_ROOT_DIR} ${dockerfileAbsolutePath})
     docker build -t "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:latest" \
         -f ${dockerfileAbsolutePath} \
         --build-arg SOURCE_GIT_REPOSITORY=${GIT_REPO_URL} \
