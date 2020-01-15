@@ -17,13 +17,21 @@ RUN echo "source /etc/profile.d/bash_completion.sh" >> ~/.bashrc
 
 # Install Confluent Cloud CLI (ccloud)
 # https://docs.confluent.io/current/cloud/cli/install.html
-RUN curl -L https://cnfl.io/ccloud-cli | sh -s -- -b /usr/local/bin
+ARG CCLOUD_CLI_VERSION=v0.218.0
+RUN curl -L https://cnfl.io/ccloud-cli | sh -s -- -b /usr/local/bin ${CCLOUD_CLI_VERSION}
 RUN ccloud completion bash >> ~/.ccloud_completion \
     && echo "source ~/.ccloud_completion" >> ~/.bashrc
 
+# Install Confluent CLI (confluent)
+# https://docs.confluent.io/current/cli/installing.html
+ARG CONFLUENT_CLI_VERSION=v0.218.0
+RUN curl -L https://cnfl.io/cli | sh -s -- -b /usr/local/bin ${CONFLUENT_CLI_VERSION}
+RUN confluent completion bash >> ~/.confluent_completion \
+    && echo "source ~/.confluent_completion" >> ~/.bashrc 
+
 # Install Kubernetes CLI (kubectl)
 # https://kubernetes.io/de/docs/tasks/tools/install-kubectl/
-ARG KUBECTL_VERSION=v1.17.0
+ARG KUBECTL_VERSION=v1.17.1
 RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
     && chmod +x /usr/local/bin/kubectl
 RUN kubectl completion bash >> ~/.kubectl_completion \
@@ -56,6 +64,17 @@ WORKDIR /root
 ARG SOURCE_GIT_REPOSITORY
 ARG SOURCE_GIT_COMMIT
 ARG DOCKERFILE_URL
+ARG README_URL
 LABEL source.git.repository=${SOURCE_GIT_REPOSITORY} \
       source.git.commit=${SOURCE_GIT_COMMIT} \
-      dockerfile.url=${DOCKERFILE_URL}
+      dockerfile.url=${DOCKERFILE_URL} \
+      readme.url=${README_URL}
+
+# Set tools related labels
+LABEL ccloudcli.version=${CCLOUD_CLI_VERSION} \
+      confluentcli.version=${CONFLUENT_CLI_VERSION} \
+      kubectl.version=${KUBECTL_VERSION} \
+      kubectx.version=${KUBECTX_VERSION}
+
+# Set Docker image version labes
+LABEL docker.image.version=${CCLOUD_CLI_VERSION}-${KUBECTL_VERSION}

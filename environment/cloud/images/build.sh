@@ -76,9 +76,10 @@ function resolveImageLabel () {
 }
 
 function resolveImageTags () {
+    local version=$(resolveImageLabel "docker.image.version")
     local timestamp=$(resolveBuildTimestamp)
     local commit=$(resolveImageLabel "source.git.commit")
-    echo "latest" "${timestamp}-${commit}"
+    echo "latest" "${version}" "${version}-${timestamp}-${commit}"
 }
 
 function build () {
@@ -86,11 +87,14 @@ function build () {
     local dockerfileDirAbsolutePath=${SCRIPT_DIR}/${DOCKERFILE_DIR}
     local dockerfileAbsolutePath=${SCRIPT_DIR}/${DOCKERFILE_DIR}/Dockerfile
     local dockerfileUrl=${GIT_REPO_URL}/blob/${commit}/$(realpath --relative-to=${GIT_ROOT_DIR} ${dockerfileAbsolutePath})
+    local readmeAbsolutePath=${SCRIPT_DIR}/${DOCKERFILE_DIR}/README.adoc
+    local readmeUrl=${GIT_REPO_URL}/blob/${commit}/$(realpath --relative-to=${GIT_ROOT_DIR} ${readmeAbsolutePath})
     docker build -t "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:latest" \
         -f ${dockerfileAbsolutePath} \
         --build-arg SOURCE_GIT_REPOSITORY=${GIT_REPO_URL} \
         --build-arg SOURCE_GIT_COMMIT=${commit} \
         --build-arg DOCKERFILE_URL=${dockerfileUrl} \
+        --build-arg README_URL=${readmeUrl} \
         ${dockerfileDirAbsolutePath}
 }
 

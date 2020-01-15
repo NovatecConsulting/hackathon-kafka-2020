@@ -1,0 +1,29 @@
+:toc:
+:toc-title:
+:toclevels: 3
+
+:sectanchors:
+:sectlinks:
+
+:cp-version: 5.4.0
+:k8s-version: v1-17
+
+:ccloudcli-version: v0.218.0
+:confluentcli-version: v0.218.0
+:kubectl-version: v1.17.1
+:kubectx-version: v0.7.1
+
+= Cloud Environment Toolbox
+
+This toolbox contains tools for working with the Confluentc Cloud and Kubernetes.
+
+- https://docs.confluent.io/{cp-version}/cloud/cli/install.html[Confluent Cloud CLI ({ccloudcli-version})]
+- https://docs.confluent.io/{cp-version}/cli/installing.html[Confluent CLI ({confluentcli-version})]
+- https://{k8s-version}.docs.kubernetes.io/de/docs/tasks/tools/install-kubectl/[Kubectl ({kubectl-version})]
+- https://github.com/ahmetb/kubectx/tree/{kubectx-version}[Kubectx and kubens ({kubectx-version})]
+
+.Run Docker container
+[subs="attributes"]
+----
+docker run --rm -it -v ~/.ccloud:/root/.ccloud -v ~/.kube:/root/.kube ueisele/ccloud-k8s-toolbox:{ccloudcli-version}-{kubectl-version}
+----
