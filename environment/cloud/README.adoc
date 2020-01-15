@@ -1,9 +1,12 @@
 :toc:
 :toc-title:
-:toclevels: 4
+:toclevels: 3
 
 :sectanchors:
 :sectlinks:
+
+:cp-version: 5.4.0
+:ccloud-version: December 20, 2019
 
 = Confluent Cloud Environment
 
@@ -27,11 +30,11 @@ To administrate a Confluent Cloud cluster you can use the Confluent Cloud CLI.
 curl -L https://cnfl.io/ccloud-cli | sh -s -- -b ~/.local/bin
 ----
 
-For more information about Confluent Cloud CLI installation, see https://docs.confluent.io/current/cloud/cli/install.html.
+For more information about Confluent Cloud CLI installation, see https://docs.confluent.io/{cp-version}/cloud/cli/install.html.
 
 === Confluent Cloud Login and First Steps
 
-For detailed information see https://docs.confluent.io/current/cloud/cli/install.html#next-steps.
+For detailed information see https://docs.confluent.io/{cp-version}/cloud/cli/install.html#next-steps.
 
 .Run this command to log in to your Confluent Cloud cluster.
 [source,bash]

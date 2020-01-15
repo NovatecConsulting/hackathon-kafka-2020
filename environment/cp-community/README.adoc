@@ -1,6 +1,11 @@
 :toc:
 :toc-title:
-:toclevels: 4
+:toclevels: 3
+
+:sectanchors:
+:sectlinks:
+
+:cp-version: 5.4.0
 
 = Confluent Platform Community Edition Docker Env
 
@@ -11,7 +16,7 @@ This folder contains a Docker-Compose environment with all components of the Con
 - Kafka Connect (confluentinc/cp-kafka-connect)
 - KSqlDB Server (confluentinc/cp-ksql-server)
 
-For more information see: https://docs.confluent.io/current/installation/docker/image-reference.html
+For more information see: https://docs.confluent.io/{cp-version}/installation/docker/image-reference.html
 
 All those components are running in cluster mode.
 
@@ -44,20 +49,22 @@ To start this environment, the following is required:
 
 == Examples
 
-Hint: _link:docker-run.sh[]_ is just a convenient script, which attaches the Docker network to the _docker run_ command. You may also execute _docker run --rm -it --net host confluentinc/cp-kafka:5.3.2 --bootstrap-server localhost:19092 ..._
+Hint: _link:docker-run.sh[]_ is just a convenient script, which attaches the Docker network to the _docker run_ command. You may also execute _docker run --rm -it --net host confluentinc/cp-kafka:{cp-version} --bootstrap-server localhost:19092 ..._
 
 === Kafka commands
 
 .Create and delete topics
+[subs="attributes"]
 ----
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka:9092 --create --topic test --partitions 6 --replication-factor 3
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka:9092 --describe
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-topics --bootstrap-server kafka:9092 --delete --topic test
+./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-topics --bootstrap-server kafka:9092 --create --topic test --partitions 6 --replication-factor 3
+./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-topics --bootstrap-server kafka:9092 --describe
+./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-topics --bootstrap-server kafka:9092 --delete --topic test
 ----
 
 .Produce records
+[subs="attributes"]
 ----
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-console-producer --broker-list kafka:9092 --property "parse.key=true" --property "key.separator=:" --topic test
+./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-console-producer --broker-list kafka:9092 --property "parse.key=true" --property "key.separator=:" --topic test
 ----
 
 .Once started, you can insert records
@@ -67,18 +74,20 @@ anotherkey:somevalue
 ----
 
 .Consume records
+[subs="attributes"]
 ----
-./docker-run.sh confluentinc/cp-kafka:5.3.2 kafka-console-consumer --bootstrap-server kafka:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test
+./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-console-consumer --bootstrap-server kafka:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test
 ----
 
 === Schema Registry commands
 
 With the Confluent Schema Registry it is possible to produce and consume records with a Avro schema.
-To find out how it works visit https://docs.confluent.io/5.3.2/schema-registry/index.html.
+To find out how it works visit https://docs.confluent.io/{cp-version}/schema-registry/index.html.
 
 .Produce records
+[subs="attributes"]
 ----
-./docker-run.sh confluentinc/cp-schema-registry:5.3.2 kafka-avro-console-producer --broker-list kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --topic testavro --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
+./docker-run.sh confluentinc/cp-schema-registry:{cp-version} kafka-avro-console-producer --broker-list kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --topic testavro --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
 ----
 
 .Once started, you can insert records
@@ -89,12 +98,13 @@ To find out how it works visit https://docs.confluent.io/5.3.2/schema-registry/i
 ----
 
 .Consume records
+[subs="attributes"]
 ----
-./docker-run.sh confluentinc/cp-schema-registry:5.3.2 kafka-avro-console-consumer --bootstrap-server kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --from-beginning --topic testavro
+./docker-run.sh confluentinc/cp-schema-registry:{cp-version} kafka-avro-console-consumer --bootstrap-server kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --from-beginning --topic testavro
 ----
 
 It is also possible to directly interact with the Confluent Schema Registry via the Rest API.
-The API is described at https://docs.confluent.io/5.3.2/schema-registry/develop/api.html.
+The API is described at https://docs.confluent.io/{cp-version}/schema-registry/develop/api.html.
 
 .Show subjects
 ----

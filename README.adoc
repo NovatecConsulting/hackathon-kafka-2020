@@ -1,9 +1,14 @@
 :toc:
 :toc-title:
-:toclevels: 4
+:toclevels: 3
 
 :sectanchors:
 :sectlinks:
+
+:kafka-version: 2.4.0
+:cp-main-version: 5.4
+:cp-version: {cp-main-version}.0
+:ccloud-version: December 20, 2019
 
 = Novatec Kafka Hackathon (WIP)
 
@@ -55,7 +60,7 @@ It is a C library implementation of the Apache Kafka protocol, providing Produce
 
 ==== Download and Usage
 
-The current version of Apache Kafka is 2.4.0 and can be downloaded at https://www.apache.org/dyn/closer.cgi?path=/kafka/2.4.0/kafka_2.12-2.4.0.tgz.
+The current version of Apache Kafka is {kafka-version} and can be downloaded at https://www.apache.org/dyn/closer.cgi?path=/kafka/{kafka-version}/kafka_2.12-{kafka-version}.tgz.
 If you would like to manually set up Kafka with this package, https://kafka.apache.org/quickstart is a good starting point.
 The Apache Kafka documentation can be found at https://kafka.apache.org/documentation/.
 
@@ -63,9 +68,9 @@ The Apache Kafka documentation can be found at https://kafka.apache.org/document
 [cols="h,1"]
 .Maven artifacts
 |===
-| Kafka Broker | org.apache.kafka:kafka_2.13:2.4.0
-| Kafka Client | org.apache.kafka:kafka-clients:2.4.0
-| Kafka Streams | org.apache.kafka:kafka-streams:2.4.0
+| Kafka Broker | org.apache.kafka:kafka_2.13:{kafka-version}
+| Kafka Client | org.apache.kafka:kafka-clients:{kafka-version}
+| Kafka Streams | org.apache.kafka:kafka-streams:{kafka-version}
 |===
 
 === Confluent Platform
@@ -75,97 +80,97 @@ If you would like to know more about the origin of Apache Kafka you should read 
 
 Some of the developers of Apache Kafke departed LinkedIn and founded Confluent, a company focused on Kafka [see https://engineering.linkedin.com/kafka/kafka-linkedin-current-and-future]. Today Confluent is still the main contributer to the Apache Kafka project. However, there is also a growing community which also contributes to Apache Kafka.
 
-Confluent offers the https://docs.confluent.io/5.3.2/platform.html[Confluent Platform], which on its core is based on the open source Apache Kafka. On top of that, the Confluent Platform encompases additional features which are developed by Confluent and not part of Apache Kafka itself.
+Confluent offers the https://docs.confluent.io/{cp-version}/platform.html[Confluent Platform], which on its core is based on the open source Apache Kafka. On top of that, the Confluent Platform encompases additional features which are developed by Confluent and not part of Apache Kafka itself.
 The Confluent Platform is available as Community and Enterprise Edition. The community edition contains additional tools for development, connectivity and data compatibility. The features of the community edition are also open source. However they are published under the so called _https://www.confluent.io/confluent-community-license-faq/[Confluent Community License Agreement]_. This license is similar to the _Apache License 2.0_, but prohibits Cloud offerings which are based on them. 
 
 .Confluent Platform Components
-image::https://docs.confluent.io/5.3.2/_images/confluentPlatform.png[Confluent Platform components]
+image::https://docs.confluent.io/{cp-version}/_images/confluentPlatform.png[Confluent Platform components]
 
 [#cp-community]
-The https://docs.confluent.io/5.3.2/platform.html#community-features[community features] of the Confluent Platform are:
+The https://docs.confluent.io/{cp-version}/platform.html#community-features[community features] of the Confluent Platform are:
 
 - https://ksqldb.io/[Confluent KSqlDB]: A streaming SQL engine for Apache Kafka, which provides an easy-to-use interactive SQL interface for stream processing on Apache Kafka, without the need to write code in a programming language such as Java. Confluent KSqlDB can be found on https://github.com/confluentinc/ksql[GitHub].
-- https://docs.confluent.io/5.3.2/connect/managing/index.html#connect-managing[Confluent Connectors]: Connectors leverage the Kafka Connect API to connect Apache Kafka to other data systems. Confluent Platform provides connectors for the most popular data sources and sinks. At the https://www.confluent.io/hub/[Confluent Hub] you can find a lot of exitsing Connectors. On https://github.com/confluentinc?utf8=%E2%9C%93&q=connect&type=&language=[GitHub] the source code of the community Connectors is published.
-- https://docs.confluent.io/5.3.2/clients/index.html#kafka-clients[Confluent Clients]: Besides Java clients, which are part of Apache Kafka, the Confluent Platform also provides clients for https://github.com/edenhill/librdkafka[C/C+\+], https://github.com/confluentinc/confluent-kafka-go/[Go], https://github.com/confluentinc/confluent-kafka-python[Python] and https://github.com/confluentinc/confluent-kafka-dotnet[.Net]. However, you have to consider, that they not fully support all Kafka features (https://docs.confluent.io/5.3.2/clients/index.html#feature-support[Supported Features]).
+- https://docs.confluent.io/{cp-version}/connect/managing/index.html#connect-managing[Confluent Connectors]: Connectors leverage the Kafka Connect API to connect Apache Kafka to other data systems. Confluent Platform provides connectors for the most popular data sources and sinks. At the https://www.confluent.io/hub/[Confluent Hub] you can find a lot of exitsing Connectors. On https://github.com/confluentinc?utf8=%E2%9C%93&q=connect&type=&language=[GitHub] the source code of the community Connectors is published.
+- https://docs.confluent.io/{cp-version}/clients/index.html#kafka-clients[Confluent Clients]: Besides Java clients, which are part of Apache Kafka, the Confluent Platform also provides clients for https://github.com/edenhill/librdkafka[C/C+\+], https://github.com/confluentinc/confluent-kafka-go/[Go], https://github.com/confluentinc/confluent-kafka-python[Python] and https://github.com/confluentinc/confluent-kafka-dotnet[.Net]. However, you have to consider, that they not fully support all Kafka features (https://docs.confluent.io/{cp-version}/clients/index.html#feature-support[Supported Features]).
 The C/C++ client is a implementation of the Apache Kafka protocol, providing Producer, Consumer and Admin client. It is called _librdkafka_ and licensed under the _2-clause BSD license_. The other clients are built on top of _librdkafka_ and published under the _Apache License 2.0_. Besides these client libraries there are many others which just are not provided directly as part of Confluent Platform (https://github.com/edenhill/librdkafka#language-bindings[Language Bindings]).
-- https://docs.confluent.io/5.3.2/kafka-rest/index.html#kafkarest-intro[Confluent Rest Proxy]: Provides a RESTful interface to a Kafka cluster. It makes it easy to produce and consume messages, view the state of the cluster, and perform administrative actions without using the native Kafka protocol or clients. Confluent Rest Proxy can be found on https://github.com/confluentinc/kafka-rest[GitHub].
-- https://docs.confluent.io/5.3.2/schema-registry/index.html#schemaregistry-intro[Confluent Schema Registry]: Enables evolution of schemas by centralizing the management of schemas written for the Avro serialization system. It provides a RESTful interface for storing and retrieving Avro schemas. It stores a versioned history of all schemas, provides multiple compatibility settings and allows evolution of schemas according to the configured compatibility setting. Schema Registry can be found on https://github.com/confluentinc/schema-registry[GitHub]. 
+- https://docs.confluent.io/{cp-version}/kafka-rest/index.html#kafkarest-intro[Confluent Rest Proxy]: Provides a RESTful interface to a Kafka cluster. It makes it easy to produce and consume messages, view the state of the cluster, and perform administrative actions without using the native Kafka protocol or clients. Confluent Rest Proxy can be found on https://github.com/confluentinc/kafka-rest[GitHub].
+- https://docs.confluent.io/{cp-version}/schema-registry/index.html#schemaregistry-intro[Confluent Schema Registry]: Enables evolution of schemas by centralizing the management of schemas written for the Avro serialization system. It provides a RESTful interface for storing and retrieving Avro schemas. It stores a versioned history of all schemas, provides multiple compatibility settings and allows evolution of schemas according to the configured compatibility setting. Schema Registry can be found on https://github.com/confluentinc/schema-registry[GitHub]. 
 
 [#cp-enterprise]
-The enterprise edition of the Confluent Plattform additionaly encompases https://docs.confluent.io/5.3.2/platform.html#commercial-features[commercial features] for operations, management and monitoring:
+The enterprise edition of the Confluent Plattform additionaly encompases https://docs.confluent.io/{cp-version}/platform.html#commercial-features[commercial features] for operations, management and monitoring:
 
 - Support 24x7x365
-- https://docs.confluent.io/5.3.2/control-center/index.html#control-center[Confluent Control Center]: Web-based tool for managing and monitoring Apache Kafka.
-- https://docs.confluent.io/5.3.2/connect/kafka-connect-replicator/index.html#connect-replicator[Confluent Replication]: Replicates topics between Apache Kafka cluster. This is the enterprise variant of the MirrorMaker, which is open source. 
-- https://docs.confluent.io/5.3.2/installation/operator/index.html#operator-about-intro[Confluent Operator]: Kubernetes operater that deploys and manages Confluent Platform as a stateful container application on Kubernetes. 
-- https://docs.confluent.io/5.3.2/kafka/rebalancer/rebalancer.html#rebalancer[Confluent Auto Data Balancer]: Balances data so that the number of leaders and disk usage are even across brokers and racks.
-- https://docs.confluent.io/current/control-center/installation/licenses.html#enterprise-connectors-lm[Confluent Connectors]: Besides the community Connectors, there are also enterprise connectors which require a enterprise license.
-- https://docs.confluent.io/5.3.2/kafka-mqtt/index.html#mqtt-proxy[Confluent MQTT Proxy]: Scalable interface that allows MQTT clients to produce messages to Apache Kafka
-- https://docs.confluent.io/5.3.2/clients/kafka-jms-client/index.html#client-jms[Confluent JMS Client]: Allows Apache Kafka to be used as a JMS message broker.
-- https://docs.confluent.io/5.3.2/confluent-security-plugins/index.html#confluentsecurityplugins-introduction[Confluent Security Plugins]: Enable pass through client credentials from REST Proxy and Schema Registry to Kafka broker.
-- https://docs.confluent.io/5.3.2/security/ldap-authorizer/introduction.html[Confluent LDAP Authorizer]: Map AD and LDAP groups to Kafka ACLs.
-- https://docs.confluent.io/5.3.2/security/rbac/index.html[Role-Based Access Control]: Provides secure authorization of access to resources by users and groups
+- https://docs.confluent.io/{cp-version}/control-center/index.html#control-center[Confluent Control Center]: Web-based tool for managing and monitoring Apache Kafka.
+- https://docs.confluent.io/{cp-version}/connect/kafka-connect-replicator/index.html#connect-replicator[Confluent Replication]: Replicates topics between Apache Kafka cluster. This is the enterprise variant of the MirrorMaker, which is open source. 
+- https://docs.confluent.io/{cp-version}/installation/operator/index.html#operator-about-intro[Confluent Operator]: Kubernetes operater that deploys and manages Confluent Platform as a stateful container application on Kubernetes. 
+- https://docs.confluent.io/{cp-version}/kafka/rebalancer/rebalancer.html#rebalancer[Confluent Auto Data Balancer]: Balances data so that the number of leaders and disk usage are even across brokers and racks.
+- https://docs.confluent.io/{cp-version}/control-center/installation/licenses.html#enterprise-connectors-lm[Confluent Connectors]: Besides the community Connectors, there are also enterprise connectors which require a enterprise license.
+- https://docs.confluent.io/{cp-version}/kafka-mqtt/index.html#mqtt-proxy[Confluent MQTT Proxy]: Scalable interface that allows MQTT clients to produce messages to Apache Kafka
+- https://docs.confluent.io/{cp-version}/clients/kafka-jms-client/index.html#client-jms[Confluent JMS Client]: Allows Apache Kafka to be used as a JMS message broker.
+- https://docs.confluent.io/{cp-version}/confluent-security-plugins/index.html#confluentsecurityplugins-introduction[Confluent Security Plugins]: Enable pass through client credentials from REST Proxy and Schema Registry to Kafka broker.
+- https://docs.confluent.io/{cp-version}/security/ldap-authorizer/introduction.html[Confluent LDAP Authorizer]: Map AD and LDAP groups to Kafka ACLs.
+- https://docs.confluent.io/{cp-version}/security/rbac/index.html[Role-Based Access Control]: Provides secure authorization of access to resources by users and groups
 
-The enterprise edition requires a license. The availables types are described at https://docs.confluent.io/5.3.2/control-center/installation/licenses.html.
+The enterprise edition requires a license. The availables types are described at https://docs.confluent.io/{cp-version}/control-center/installation/licenses.html.
 
 ==== Download and Usage
 
-The current version of the Confluent Platform is 5.3.2. How to manually download and install the platform is decsribed at https://docs.confluent.io/5.3.2/installation/installing_cp/zip-tar.html.
+The current version of the Confluent Platform is {cp-version}. How to manually download and install the platform is decsribed at https://docs.confluent.io/{cp-version}/installation/installing_cp/zip-tar.html.
 
 [cols="h,1"]
 .Download
 |===
-| Community Edition | https://packages.confluent.io/archive/5.3/confluent-community-5.3.2-2.12.tar.gz
-| Enterprise Edition | https://packages.confluent.io/archive/5.3/confluent-5.3.2-2.12.tar.gz
+| Community Edition | https://packages.confluent.io/archive/{cp-main-version}/confluent-community-{cp-version}-2.12.tar.gz
+| Enterprise Edition | https://packages.confluent.io/archive/{cp-main-version}/confluent-{cp-version}-2.12.tar.gz
 |===
 
-Confluent Platform 5.3.2 basically includes Apache Kafka 2.3.1. However, Confluent uses a different version scheme and release cycle than Apache.
-Therefore, the included Broker has the version 5.3.2 which basically is Apache Kafka 2.3.1, but may include additional bug fixes. More information about the included versions are given at the https://docs.confluent.io/5.3.2/release-notes/index.html[Confluent Platform Release Notes].
+Confluent Platform {cp-version} basically includes Apache Kafka {kafka-version}. However, Confluent uses a different version scheme and release cycle than Apache.
+Therefore, the included Broker has the version {cp-version} which basically is Apache Kafka {kafka-version}, but may include additional bug fixes. More information about the included versions are given at the https://docs.confluent.io/{cp-version}/release-notes/index.html[Confluent Platform Release Notes].
 
-Confluence provides a detailed documentation about the platform at https://docs.confluent.io/current/.
+Confluence provides a detailed documentation about the platform at https://docs.confluent.io/{cp-version}/.
 
 [#cp-clients]
 [cols="h,1"]
 .Maven artifacts for the Community Edition
 |===
-| Kafka Broker | org.apache.kafka:kafka_2.12:5.3.2-ccs
-| Kafka Client | org.apache.kafka:kafka-clients:5.3.2-ccs
-| Kafka Streams | org.apache.kafka:kafka-streams:5.3.2-ccs
-| Kafka Avro Serializer | io.confluent:kafka-avro-serializer:5.3.2
-| Kafka Streams Serde | io.confluent:kafka-streams-avro-serde:5.3.2
+| Kafka Broker | org.apache.kafka:kafka_2.12:{cp-version}-ccs
+| Kafka Client | org.apache.kafka:kafka-clients:{cp-version}-ccs
+| Kafka Streams | org.apache.kafka:kafka-streams:{cp-version}-ccs
+| Kafka Avro Serializer | io.confluent:kafka-avro-serializer:{cp-version}
+| Kafka Streams Serde | io.confluent:kafka-streams-avro-serde:{cp-version}
 |===
 
 [cols="h,1"]
 .Maven artifacts for the Enterprise Edition
 |===
-| Kafka Broker | org.apache.kafka:kafka_2.12:5.3.2-ce
-| Kafka Client | org.apache.kafka:kafka-clients:5.3.2-ce
-| Kafka Streams | org.apache.kafka:kafka-streams:5.3.2-ce
-| Kafka Avro Serializer | io.confluent:kafka-avro-serializer:5.3.2
-| Kafka Streams Serde | io.confluent:kafka-streams-avro-serde:5.3.2
+| Kafka Broker | org.apache.kafka:kafka_2.12:{cp-version}-ce
+| Kafka Client | org.apache.kafka:kafka-clients:{cp-version}-ce
+| Kafka Streams | org.apache.kafka:kafka-streams:{cp-version}-ce
+| Kafka Avro Serializer | io.confluent:kafka-avro-serializer:{cp-version}
+| Kafka Streams Serde | io.confluent:kafka-streams-avro-serde:{cp-version}
 |===
 
 Hint: To use Confluent Maven artifacts you have to use the Confluent Maven repository http://packages.confluent.io/maven/.
 
 === Confluent Cloud
 
-Confluent Cloud is a fully managed cloud service based on Apache Kafka provided by Confluent. The Web UI is available at https://confluent.cloud/. At this page you can also create a new Account. Besides the Web UI, https://docs.confluent.io/current/cloud/using/cloud-basics.html#install-the-ccloud-cli[Clonfluent Cloud CLI] can be used to create and manage Kafka topics.
+Confluent Cloud is a fully managed cloud service based on Apache Kafka provided by Confluent. The Web UI is available at https://confluent.cloud/. At this page you can also create a new Account. Besides the Web UI, https://docs.confluent.io/{cp-version}/cloud/using/cloud-basics.html#install-the-ccloud-cli[Clonfluent Cloud CLI] can be used to create and manage Kafka topics.
 
-Confluent Cloud, in contrast to other cloud offerings like AWS Kinesis or Azure Event Hubs, is based on Apache Kafka and therfore supports all API features since Kafka 0.10.0.0 (see the https://docs.confluent.io/current/cloud/faq.html#what-client-and-protocol-versions-are-supported[FAQ]).
+Confluent Cloud, in contrast to other cloud offerings like AWS Kinesis or Azure Event Hubs, is based on Apache Kafka and therfore supports all API features since Kafka 0.10.0.0 (see the https://docs.confluent.io/{cp-version}/cloud/faq.html#what-client-and-protocol-versions-are-supported[FAQ]).
 In addition, Confluent Cloud is really a fully managed service, and does not require any administrative actions to operate the cluster like AWS MSK does. 
 
-Confluent Cloud is based on Apache Kafka, however it is not 100% identical to Apache Kafka or the Confluent Platform. The Confluent Cloud may for example miss features which are already available in the downloadable version. Which features are supported is described in the https://docs.confluent.io/current/cloud/release-notes.html[Confluent Cloud Release Notes]. The Confluent Cloud releases have also there own version schema. During writing, the latest version was _December 20, 2019_.
-However, Confluent says that everything is based on open source components and that it is possible to recreate everything outside of Confluent Cloud (see https://docs.confluent.io/current/cloud/index.html#features[basic features]). For detailed information about supported features, see https://docs.confluent.io/current/cloud/limits.html[Confluent Cloud Supported Features and Limits].
+Confluent Cloud is based on Apache Kafka, however it is not 100% identical to Apache Kafka or the Confluent Platform. The Confluent Cloud may for example miss features which are already available in the downloadable version. Which features are supported is described in the https://docs.confluent.io/{cp-version}/cloud/release-notes.html[Confluent Cloud Release Notes]. The Confluent Cloud releases have also there own version schema. During writing, the latest version was _{ccloud-version}_.
+However, Confluent says that everything is based on open source components and that it is possible to recreate everything outside of Confluent Cloud (see https://docs.confluent.io/{cp-version}/cloud/index.html#features[basic features]). For detailed information about supported features, see https://docs.confluent.io/{cp-version}/cloud/limits.html[Confluent Cloud Supported Features and Limits].
 
 Confluent Cloud supports the creation of Kafka clusters on GCP, AWS and Azure clouds (see https://www.confluent.io/confluent-cloud/compare/).
 
 The Kafka clusters created in the standard Confluent Cloud are basically virtual clusters, which are physically shared with other tenants.
 For mission-critical apps, Confluent has also an enterprise offering at which a deticated Confluent Cloud environment with deticated Kafka clusters is provided. It is not possible to create a dedicated Kafka cluster via Confluent Cloud. To do this you have to get in contact with Confluent.
 
-To get in touch with Confluent Cloud, the https://docs.confluent.io/current/quickstart/cloud-quickstart/index.html[Confluent Cloud Quick Start] is a good starting point.
-In the GitHub repository https://github.com/confluentinc/examples/blob/5.3.2-post/clients/cloud/README.md[confluentinc/examples] many example implementations in multiple programming languages are provided.
+To get in touch with Confluent Cloud, the https://docs.confluent.io/{cp-version}/quickstart/cloud-quickstart/index.html[Confluent Cloud Quick Start] is a good starting point.
+In the GitHub repository https://github.com/confluentinc/examples/blob/{cp-version}-post/clients/cloud/README.md[confluentinc/examples] many example implementations in multiple programming languages are provided.
 In principle, the default <<apache-clients, Apache>> or <<cp-clients, Confluent client>> libraries can be used to connect to the Confluent Cloud.  
-The required configuration is described in detail at the https://docs.confluent.io/current/cloud/using/config-client.html[Confluent Cloud client documentation].
+The required configuration is described in detail at the https://docs.confluent.io/{cp-version}/cloud/using/config-client.html[Confluent Cloud client documentation].
 
 == Hackathon Development Environment
 
