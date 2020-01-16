@@ -214,6 +214,13 @@ What do we need to use the Cloud environment?
 - Account on Docker Hub to use it as Docker registry for Kubernetes (https://hub.docker.com)
 - Confluent Cloud and Kubernetes CLI tools (install manually or use provided Docker image, see link:tools/ccloud-k8s-toolbox[])
 
+==== Connect Confluent Platform components to Confluent Cloud
+
+To connect Confluent Platform components to Confluent Cloud, see https://docs.confluent.io/{cp-version}/cloud/connect/index.html.
+If you would like to configure and connect clients, see https://docs.confluent.io/{cp-version}/cloud/using/config-client.html.
+
+If you would like to auto-generate configs, see https://docs.confluent.io/{cp-version}/cloud/connect/auto-generate-configs.html. 
+
 == Support
 
 === Community and Documentation
