@@ -10,7 +10,7 @@
 :cp-version: {cp-main-version}.0
 :ccloud-version: December 20, 2019
 
-= Novatec Kafka Hackathon (WIP)
+= Novatec Kafka Hackathon
 
 == Overview
 
@@ -172,40 +172,62 @@ In the GitHub repository https://github.com/confluentinc/examples/blob/{cp-versi
 In principle, the default <<apache-clients, Apache>> or <<cp-clients, Confluent client>> libraries can be used to connect to the Confluent Cloud.  
 The required configuration is described in detail at the https://docs.confluent.io/{cp-version}/cloud/using/config-client.html[Confluent Cloud client documentation].
 
+== Hackathon Projects
+
+Please create your custom team projects at link:projects/[], so that we can share our code. In order to distinguish them, please prefix the name of your projects with your team name.
+
+What do we need for the Kafka Hackathon?
+
+- Account on GitHub to publish your code at link:projects/[]
+
+== Examples
+
+Examples for the Hackathon are listed at link:examples/[].
+
 == Hackathon Development Environment
 
 For the Hackathon, two different environemts are provided:
 
 - Local environment with Confluent Platform Community Edition running in Docker
-- Cloud environment with Confluent Cloud
+- Cloud environment with Confluent Cloud and Kubernetes
 
 === Local Environment
 
 Local environment with Confluent Platform Community Edition is located at link:environment/cp-community[].
-Detailed information about the environment can be found at link:environment/cp-community/README.adoc[].
+
+What do we need to use the local environment?
+
+- Bash (for Windows use https://docs.microsoft.com/de-de/windows/wsl/install-win10[WSL] or https://cygwin.com/install.html[Cygwin])
+- https://docs.docker.com/install/#server[Docker] (https://docs.microsoft.com/de-de/archive/blogs/stevelasker/configuring-docker-for-windows-volumes[in Windows volume mounts must be enabled])
+- https://docs.docker.com/compose/install/[Docker-Compose]
 
 === Cloud Enviornment
 
-What do we need?
+You can use an exitsing Confluent Cloud Kafka cluster and a Kubernetes cluster for your projects. The existing Cloud environment has been created with link:environment/cloud/provision/[].
 
-- Kubernetes config file to connect to Kubernetes cluster
-- Counfluent Cloud credentials (API Key)
+If you are interessted in Confluent Cloud itself, you can go through the link:environment/cloud/README.adoc[Confluent Cloud Tutorial] and create your own Kafka cluster.
+
+What do we need to use the Cloud environment?
+
+- Kubernetes config file to connect to Kubernetes cluster (shared during the Hackathon)
+- Counfluent Cloud credentials (shared during the Hackathon)
 - Account on Docker Hub to use it as Docker registry for Kubernetes (https://hub.docker.com)
-- Account on GitHub to publish your code at https://github.com/NovatecConsulting/technologyconsulting-kafka-hackathon/tree/master/projects
+- Confluent Cloud and Kubernetes CLI tools (install manually or use provided Docker image, see link:tools/ccloud-k8s-toolbox[])
 
-==== Kubernetes Cluster
+== Support
 
-Tools:
- 
- - kubectl - Cli for Kubernetes (https://kubernetes.io/de/docs/tasks/tools/install-kubectl/)
- - kubectx - Context switch between clusters (https://github.com/ahmetb/kubectx)
+=== Community and Documentation
 
-==== Docker Registry
+- https://confluentcommunity.slack.com[Confluent Community Slack Channel]
+- https://kafka.apache.org/documentation/[Apache Kafka Documentation]
+- https://docs.confluent.io/{cp-version}/index.html[Confluent Platform Documentation]
+- https://docs.confluent.io/{cp-version}/cloud/index.html[Confluent Cloud Documentation]
+- https://www.confluent.de/blog/[Confluent Blog]
 
-== Examples
+=== API Portals for Data
 
-Confluent provides a lot of examples and tutorals on GitHub at https://github.com/confluentinc/examples[confluentinc/examples].
-
-== Hackathon Projects
-
-Please create your custom team projects at link:projects/[], so that we can share our code. In order to distinguish them, pleas prefix the name of your projects with your team name.
+- https://developer.fraport.de[Fraport API Portal]
+- https://developer.lufthansa.com[Lufthansa API Portal] (e.g. https://developer.lufthansa.com/docs/read/api_basics/notification_service[Flight Status Updates via MQTT])
+- https://developer.deutschebahn.com/store/[Deutsche Bahn API Portal]
+- https://tfl.gov.uk/info-for/open-data-users/our-open-data?intcmp=3671[Transport for Londong API Portal]
+- https://opendata.cityofnewyork.us/[NYC OpenData Portal]

@@ -1,3 +1,8 @@
 = Kafka Hackathon Exmaple Projects
 
-This folder contains examples which may be used as a template or as a foundation for a custom Hackathon project.
+Confluent provides a lot of examples and tutorals on GitHub at https://github.com/confluentinc/examples[confluentinc/examples].
+
+Further examples:
+
+- https://www.confluent.de/blog/stream-processing-twitter-data-with-ksqldb/
+- https://github.com/xPerdev/hackathon-ksql

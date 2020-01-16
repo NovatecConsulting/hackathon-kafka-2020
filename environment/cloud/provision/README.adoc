@@ -1,0 +1,19 @@
+:toc:
+:toc-title:
+:toclevels: 3
+
+:sectanchors:
+:sectlinks:
+
+:cp-version: 5.4.0
+
+= Cloud Environment Provisioning
+
+== Create Confluent Cloud Kafka Cluster
+
+.Run Kafka cluster creation script from ueisele/ccloud-k8s-toolbox
+[source,bash]
+----
+docker run --rm -it -v $(pwd):/root/provision ~/.ccloud:/root/.ccloud ueisele/ccloud-k8s-toolbox:v0.218.0-v1.17.1-20200116T2056UTC-2ba8f4c \
+provision/ccloud-create.sh --prefix $TEAM_NAME
+----
