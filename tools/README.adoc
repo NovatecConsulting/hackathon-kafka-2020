@@ -1,0 +1,37 @@
+:toc:
+:toc-title:
+:toclevels: 3
+
+:sectanchors:
+:sectlinks:
+
+= Hackathon Tools
+
+This folder contains usefull tools for the Kafka hackathon.
+All tools are provides as Docker images and available on Docker Hub.
+
+== Overview
+
+- link:ccloud-k8s-toolbox/README.adoc[Confluent Cloud and Kubernetes CLI tools (ccloud-k8s-toolbox)]
+
+== Build Tools
+
+.Build a tool
+[source,bash]
+----
+./build.sh --build <tool name, e.g. ccloud-k8s-toolbox>
+----
+
+.Push tool to Docker Hub
+[source,bash]
+----
+./build.sh --push <tool name, e.g. ccloud-k8s-toolbox>
+----
+
+.In order to push to Docker Hub you need to login
+[source,bash]
+----
+docker login
+----
+
+By default, the build script pushes to account `ueisele`. This can be changed by specifing `--user username` together with `--build` and `--push` options.

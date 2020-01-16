@@ -23,7 +23,7 @@ This toolbox contains tools for working with the Confluentc Cloud and Kubernetes
 - https://github.com/ahmetb/kubectx/tree/{kubectx-version}[Kubectx and kubens ({kubectx-version})]
 
 .Run Docker container
-[subs="attributes"]
+[source,bash,subs="attributes"]
 ----
 docker run --rm -it -v ~/.ccloud:/root/.ccloud -v ~/.kube:/root/.kube ueisele/ccloud-k8s-toolbox:{ccloudcli-version}-{kubectl-version}
 ----

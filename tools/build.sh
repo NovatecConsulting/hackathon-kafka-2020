@@ -7,7 +7,7 @@ GIT_REPO_URL=$(git config --get remote.origin.url | sed 's/:/\//' | sed 's/\.git
 GIT_ROOT_DIR=$(git rev-parse --show-toplevel)
 popd > /dev/null
 
-DOCKERHUB_USER="ueisele"
+DOCKERREGISTRY_USER="ueisele"
 
 PUSH=false
 BUILD=false
@@ -16,7 +16,7 @@ DOCKERFILE_DIR=""
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] <directory e.g. ccloud-k8s-toolbox>"
+    echo "Usage: $0 [--build] [--push] [--user <name, e.g. ueisele>] <directory, e.g. ccloud-k8s-toolbox>"
     echo
     return 1
 }
@@ -31,6 +31,19 @@ function parseCmd () {
             --push)
                 PUSH=true
                 shift
+                ;;
+            --user)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Docker registry user name"
+                        return 1
+                        ;;
+                    *)
+                        DOCKERREGISTRY_USER=$1
+                        shift
+                        ;;
+                esac
                 ;;
             -*)
                 usage "Unknown option: $1"
@@ -64,7 +77,7 @@ function resolveCommit () {
 }
 
 function resolveBuildTimestamp() {
-    local created=$(docker inspect --format "{{ index .Created }}" "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:latest")
+    local created=$(docker inspect --format "{{ index .Created }}" "${DOCKERREGISTRY_USER}/${DOCKERFILE_DIR}:latest")
     date --utc -d "${created}" +'%Y%m%dT%H%M%Z'
 }
 
@@ -72,7 +85,7 @@ function resolveImageLabel () {
     local label=${1:-"Missing label name as first parameter!"}
     docker inspect \
         --format "{{ index .Config.Labels \"${label}\"}}" \
-        "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:latest"
+        "${DOCKERREGISTRY_USER}/${DOCKERFILE_DIR}:latest"
 }
 
 function resolveImageTags () {
@@ -89,7 +102,7 @@ function build () {
     local dockerfileUrl=${GIT_REPO_URL}/blob/${commit}/$(realpath --relative-to=${GIT_ROOT_DIR} ${dockerfileAbsolutePath})
     local readmeAbsolutePath=${SCRIPT_DIR}/${DOCKERFILE_DIR}/README.adoc
     local readmeUrl=${GIT_REPO_URL}/blob/${commit}/$(realpath --relative-to=${GIT_ROOT_DIR} ${readmeAbsolutePath})
-    docker build -t "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:latest" \
+    docker build -t "${DOCKERREGISTRY_USER}/${DOCKERFILE_DIR}:latest" \
         -f ${dockerfileAbsolutePath} \
         --build-arg SOURCE_GIT_REPOSITORY=${GIT_REPO_URL} \
         --build-arg SOURCE_GIT_COMMIT=${commit} \
@@ -100,13 +113,13 @@ function build () {
 
 function tag () {
     for t in $(resolveImageTags); do
-        docker tag "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:latest" "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:${t}"
+        docker tag "${DOCKERREGISTRY_USER}/${DOCKERFILE_DIR}:latest" "${DOCKERREGISTRY_USER}/${DOCKERFILE_DIR}:${t}"
     done
 }
 
 function push () {
     for t in $(resolveImageTags); do
-        docker push "${DOCKERHUB_USER}/${DOCKERFILE_DIR}:${t}"
+        docker push "${DOCKERREGISTRY_USER}/${DOCKERFILE_DIR}:${t}"
     done
 }
 

@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     # Install tools
     && apt-get -y install --no-install-recommends \
-        procps curl wget telnet dnsutils ca-certificates vim less git bash-completion \
+        curl wget httpie telnet dnsutils net-tools ca-certificates procps vim less jq git bash-completion \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
