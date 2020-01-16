@@ -1,0 +1,33 @@
+---
+version: '2'
+services:
+    # https://ksqldb.io/ (https://hub.docker.com/r/confluentinc/ksqldb-server)
+  ksqldb-server:
+    image: confluentinc/ksqldb-server:${VERSION_KSQLDB}
+    restart: unless-stopped
+    hostname: ksqldb-server
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3  
+    ports:
+      - "18088:8088"
+    environment:
+      KSQL_HOST_NAME: ksqldb-server
+      KSQL_LISTENERS: "http://0.0.0.0:8088"
+      KSQL_BOOTSTRAP_SERVERS: kafka:9092
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: http://schemaregistry:8081
+      KSQL_AUTO_OFFSET_RESET: "earliest"
+      KSQL_COMMIT_INTERVAL_MS: 0
+      KSQL_CACHE_MAX_BYTES_BUFFERING: 0
+      KSQL_KSQL_STREAMS_REPLICATION_FACTOR: 3
+      KSQL_KSQL_INTERNAL_TOPIC_REPLICAS: 3
+      KSQL_KSQL_SINK_REPLICAS: 3
+
+  ksqldb-cli:
+    image: confluentinc/ksqldb-cli:${VERSION_KSQLDB}
+    hostname: ksqldb-cli
+    depends_on:
+      - ksqldb-server
+    entrypoint: /bin/bash
+    tty: true

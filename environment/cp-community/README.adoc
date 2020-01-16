@@ -11,14 +11,12 @@
 
 This folder contains a Docker-Compose environment with all components of the Confluent Platform Community Edition:
 
-- Kafka (confluentinc/cp-kafka)
-- Schema Registry (confluentinc/cp-schema-registry)
-- Kafka Connect (confluentinc/cp-kafka-connect)
-- KSqlDB Server (confluentinc/cp-ksql-server)
+- Kafka (confluentinc/cp-kafka) in cluster mode
+- Schema Registry (confluentinc/cp-schema-registry) in cluster mode
+- Kafka Connect (confluentinc/cp-kafka-connect) // Not included in environment until now!
+- kSqlDB Server (confluentinc/ksqldb-server)
 
 For more information see: https://docs.confluent.io/{cp-version}/installation/docker/image-reference.html
-
-All those components are running in cluster mode.
 
 Additionally it encompases Prometheus and Grafana as monitoring tools.
 
@@ -33,16 +31,19 @@ To start this environment, the following is required:
 == Quick Start
 
 .Start complete CP environment
+[source,bash]
 ----
 ./up.sh --with-monitoring all
 ----
 
 .Start CP environment with specific services
+[source,bash]
 ----
-./up.sh --with-monitoring kafka schemaregistry connect ksqldb
+./up.sh --with-monitoring kafka schemaregistry ksqldb
 ----
 
 .Stop complete CP environment
+[source,bash]
 ----
 ./down.sh
 ----
@@ -54,7 +55,7 @@ Hint: _link:docker-run.sh[]_ is just a convenient script, which attaches the Doc
 === Kafka commands
 
 .Create and delete topics
-[subs="attributes"]
+[source,bash,subs="attributes"]
 ----
 ./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-topics --bootstrap-server kafka:9092 --create --topic test --partitions 6 --replication-factor 3
 ./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-topics --bootstrap-server kafka:9092 --describe
@@ -62,7 +63,7 @@ Hint: _link:docker-run.sh[]_ is just a convenient script, which attaches the Doc
 ----
 
 .Produce records
-[subs="attributes"]
+[source,bash,subs="attributes"]
 ----
 ./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-console-producer --broker-list kafka:9092 --property "parse.key=true" --property "key.separator=:" --topic test
 ----
@@ -74,7 +75,7 @@ anotherkey:somevalue
 ----
 
 .Consume records
-[subs="attributes"]
+[source,bash,subs="attributes"]
 ----
 ./docker-run.sh confluentinc/cp-kafka:{cp-version} kafka-console-consumer --bootstrap-server kafka:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test
 ----
@@ -85,7 +86,7 @@ With the Confluent Schema Registry it is possible to produce and consume records
 To find out how it works visit https://docs.confluent.io/{cp-version}/schema-registry/index.html.
 
 .Produce records
-[subs="attributes"]
+[source,bash,subs="attributes"]
 ----
 ./docker-run.sh confluentinc/cp-schema-registry:{cp-version} kafka-avro-console-producer --broker-list kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --topic testavro --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
 ----
@@ -98,7 +99,7 @@ To find out how it works visit https://docs.confluent.io/{cp-version}/schema-reg
 ----
 
 .Consume records
-[subs="attributes"]
+[source,bash,subs="attributes"]
 ----
 ./docker-run.sh confluentinc/cp-schema-registry:{cp-version} kafka-avro-console-consumer --bootstrap-server kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --from-beginning --topic testavro
 ----
@@ -107,17 +108,20 @@ It is also possible to directly interact with the Confluent Schema Registry via 
 The API is described at https://docs.confluent.io/{cp-version}/schema-registry/develop/api.html.
 
 .Show subjects
+[source,bash]
 ----
 ./docker-run.sh dwdraju/alpine-curl-jq curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/subjects
 ----
 
 .Show versions of registered subject
+[source,bash]
 ----
 subject=testavro-value
 docker-run.sh dwdraju/alpine-curl-jq curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/subjects/${subject}/versions/
 ----
 
 .Show specific version of a schema within a subject
+[source,bash]
 ----
 subject=testavro-value
 schemaversion=1
@@ -125,6 +129,7 @@ docker-run.sh dwdraju/alpine-curl-jq curl -s -H "Accept: application/vnd.schemar
 ----
 
 .Register a new schema for a subject
+[source,bash]
 ----
 subject=mysubject
 schema={"schema":"{\"type\":\"record\",\"name\":\"myschema\",\"namespace\":\"this.is.a.test\",\"fields\":[{\"name\":\"field\",\"type\":\"string\"}]}"}
@@ -132,17 +137,29 @@ schema={"schema":"{\"type\":\"record\",\"name\":\"myschema\",\"namespace\":\"thi
 ----
 
 .The registration command returns the id of the schema
+[source,bash]
 ----
 [2]
 ----
 
 .Get the schema by its id
+[source,bash]
 ----
 schemaid=2
 ./docker-run.sh dwdraju/alpine-curl-jq curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/schemas/ids/${schemaid}
 ----
 
 In order to use the Confluent Schema Registry in your application use the serializer and deserializer from the artifacts _io.confluent:kafka-avro-serializer_ and _io.confluent:kafka-streams-avro-serde_.
+
+=== ksqlDB
+
+.Run the ksqlDB CLI
+[source,bash]
+----
+./docker-compose.sh exec ksqldb-cli ksql http://ksqldb-server:8088
+----
+
+For more information, see https://ksqldb.io/.
 
 == Network and Credentials
 
@@ -158,6 +175,7 @@ In order to use the Confluent Schema Registry in your application use the serial
 |===
 | Kafka Bootstrap Servers |  kafka:9092
 | Schema Registry Urls | http://schemaregistry:8081
+| ksqlDB Server | http://ksqldb-server:8088
 | Grafana Url | http://grafana:3000
 | Prometheus Url | http://prometheus:9090
 |===
@@ -167,6 +185,7 @@ In order to use the Confluent Schema Registry in your application use the serial
 |===
 | Kafka Bootstrap Servers |  localhost:19092,localhost:29092,localhost:39092
 | Schema Registry Urls | http://localhost:18081,http://localhost:28081
+| ksqlDB Server | http://localhost:18088
 | Grafana Url | http://localhost:13000
 | Prometheus Url | http://localhost:19090
 |===

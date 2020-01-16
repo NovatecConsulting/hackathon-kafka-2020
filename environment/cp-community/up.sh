@@ -8,17 +8,19 @@ source ./up-kafka.sh
 source ./test-kafka.sh
 source ./up-schemaregistry.sh
 source ./test-schemaregistry.sh
+source ./up-ksqldb.sh
 source ./ips.sh
 popd > /dev/null
 
 MONITORING=false
 KAFKA=false
 SCHEMAREGISTRY=false
+KSQLDB=false
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--with-monitoring] all kafka schemaregistry connect ksqldb"
+    echo "Usage: $0 [--with-monitoring] all kafka schemaregistry ksqldb"
     echo
     return 1
 }
@@ -35,6 +37,7 @@ function parseCmd () {
                 any_selected=true
                 KAFKA=true
                 SCHEMAREGISTRY=true
+                KSQLDB=true
                 shift
                 ;;
             kafka)
@@ -45,6 +48,11 @@ function parseCmd () {
             schemaregistry)
                 any_selected=true
                 SCHEMAREGISTRY=true
+                shift
+                ;;
+            ksqldb)
+                any_selected=true
+                KSQLDB=true
                 shift
                 ;;
             *)
@@ -86,6 +94,10 @@ function main () {
     if [ "$SCHEMAREGISTRY" = true ]; then
         start_schemaregistry
         test_schemaregistry
+    fi
+
+    if [ "$KSQLDB" = true ]; then
+        start_ksqldb
     fi
 
     echo -e "\n"
