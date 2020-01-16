@@ -188,10 +188,10 @@ Examples for the Hackathon are listed at link:examples/[].
 
 For the Hackathon, two different environemts are provided:
 
-- Local environment with Confluent Platform Community Edition running in Docker
-- Cloud environment with Confluent Cloud and Kubernetes
+- <<Local environment>> with Confluent Platform Community Edition running in Docker
+- <<Cloud environment>> with Confluent Cloud and Kubernetes
 
-=== Local Environment
+=== Local environment
 
 Local environment with Confluent Platform Community Edition is located at link:environment/cp-community[].
 
@@ -201,7 +201,7 @@ What do we need to use the local environment?
 - https://docs.docker.com/install/#server[Docker] (https://docs.microsoft.com/de-de/archive/blogs/stevelasker/configuring-docker-for-windows-volumes[in Windows volume mounts must be enabled])
 - https://docs.docker.com/compose/install/[Docker-Compose]
 
-=== Cloud Enviornment
+=== Cloud environment
 
 You can use an exitsing Confluent Cloud Kafka cluster and a Kubernetes cluster for your projects. The existing Cloud environment has been created with link:environment/cloud/provision/[].
 
