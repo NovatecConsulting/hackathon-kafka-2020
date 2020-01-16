@@ -7,7 +7,7 @@
 
 :cp-version: 5.4.0
 
-= Confluent Platform Community Edition Docker Env
+= Confluent Platform Community Edition Docker Environment
 
 This folder contains a Docker-Compose environment with all components of the Confluent Platform Community Edition:
 
