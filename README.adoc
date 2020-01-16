@@ -201,3 +201,11 @@ Tools:
  - kubectx - Context switch between clusters (https://github.com/ahmetb/kubectx)
 
 ==== Docker Registry
+
+== Examples
+
+Confluent provides a lot of examples and tutorals on GitHub at https://github.com/confluentinc/examples[confluentinc/examples].
+
+== Hackathon Projects
+
+Please create your custom team projects at link:projects/[], so that we can share our code. In order to distinguish them, pleas prefix the name of your projects with your team name.

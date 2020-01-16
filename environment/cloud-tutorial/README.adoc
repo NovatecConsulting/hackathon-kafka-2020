@@ -153,7 +153,8 @@ Save the API key and secret. The secret is not retrievable later.
 +---------+------------------------------------------------------------------+
 ----
 
-Typically, you would not create one API key with full access for all your application. A more realistic approach would be to create a dedicated API key for each application and only enable access to required resources and operations.
+Typically, you would not create one API key with full access for all your application. 
+The recommended approach is o create a dedicated API key for each application and only enable access to required resources and operations.
 
 Confluent Cloud CLI can also act as procuder and consumer on a cluster. In order to enable the CLI to do that, it is necessary to activate an appropriate API key. 
 
