@@ -12,9 +12,12 @@ CCLOUD_RESOURCE_PREFIX=$((1 + RANDOM % 1000000))
 CCLOUD_ENVIRONMENT_NAME="hackathon-example"
 
 # Script variables
+ENV_ID=""
 CLUSTER_ID=""
 BOOTSTRAP_SERVERS=""
-API_KEY=""
+CLUSTER_API_KEY=""
+SR_ID=""
+SR_API_KEY=""
 
 function main () {
     parseCmd "$@"
@@ -30,7 +33,13 @@ function main () {
     createCCloudKafkaCluster
     if [ $? != 0 ]; then exit 1; fi
 
-    createCCloudAPIKey
+    createCCloudClusterAPIKey
+    if [ $? != 0 ]; then exit 1; fi
+
+    createCCloudSchemaRegistry
+    if [ $? != 0 ]; then exit 1; fi
+
+    createCCloudSRAPIKey
     if [ $? != 0 ]; then exit 1; fi
  }
 
@@ -139,11 +148,11 @@ function createCCloudEnv () {
     fi
     echo "ccloud environment list | grep $env_name"
     ccloud environment list | grep $env_name
-    local env_id=$(ccloud environment list | grep $env_name | awk '{print $1;}')
+    ENV_ID=$(ccloud environment list | grep $env_name | awk '{print $1;}')
 
     echo -e "\n# Specify active environment that was just created"
-    echo "ccloud environment use $env_id"
-    ccloud environment use $env_id
+    echo "ccloud environment use $ENV_ID"
+    ccloud environment use $ENV_ID
 }
 
 function createCCloudKafkaCluster () {
@@ -154,8 +163,8 @@ function createCCloudKafkaCluster () {
     local status=$?
     echo "$output"
     if [[ $status != 0 ]]; then
-    echo "Failed to create Kafka cluster $cluster_name. Please troubleshoot and run again"
-    exit 1
+        echo "Failed to create Kafka cluster $cluster_name. Please troubleshoot and run again"
+        exit 1
     fi
     CLUSTER_ID=$(echo "$output" | grep '| Id' | awk '{print $4;}')
 
@@ -165,21 +174,45 @@ function createCCloudKafkaCluster () {
     BOOTSTRAP_SERVERS=$(echo "$output" | grep "Endpoint" | grep SASL_SSL | awk '{print $4;}' | cut -c 12-)
 }
 
-function createCCloudAPIKey () {
+function createCCloudClusterAPIKey () {
     echo -e "\n# Create API key for user $CCLOUD_EMAIL and cluster $CLUSTER_ID"
     echo "ccloud api-key create --description \"Demo credentials for user $CCLOUD_EMAIL and cluster $CLUSTER_ID\" --resource $CLUSTER_ID"
     local output=$(ccloud api-key create --description "Demo credentials for user $CCLOUD_EMAIL and cluster $CLUSTER_ID" --resource $CLUSTER_ID)
     local status=$?
     echo "$output"
     if [[ $status != 0 ]]; then
-    echo "Failed to create an API key.  Please troubleshoot and run again"
-    exit 1
+        echo "Failed to create an API key for schema registry of environment $ENV_ID.  Please troubleshoot and run again"
+        exit 1
     fi
-    API_KEY=$(echo "$output" | grep '| API Key' | awk '{print $5;}')
+    CLUSTER_API_KEY=$(echo "$output" | grep '| API Key' | awk '{print $5;}')
 
     echo -e "\n# Specify active API key that was just created"
-    echo "ccloud api-key use $API_KEY --resource $CLUSTER_ID"
-    ccloud api-key use $API_KEY --resource $CLUSTER_ID
+    echo "ccloud api-key use $CLUSTER_API_KEY --resource $CLUSTER_ID"
+    ccloud api-key use $CLUSTER_API_KEY --resource $CLUSTER_ID
+}
+
+function createCCloudSchemaRegistry () {
+    local output=$(ccloud schema-registry cluster enable --cloud gcp --geo eu)
+    local status=$?
+    echo "$output"
+    if [[ $status != 0 ]]; then
+        echo "Failed to enable schema registry. Please troubleshoot and run again"
+        exit 1
+    fi
+    SR_ID=$(echo "$output" | grep '| Id' | awk '{print $4;}')
+}
+
+function createCCloudSRAPIKey () {
+    echo -e "\n# Create API key for user $CCLOUD_EMAIL and schema registry $SR_ID"
+    echo "ccloud api-key create --description \"Demo credentials for user $CCLOUD_EMAIL and schema registry $SR_ID\" --resource $SR_ID"
+    local output=$(ccloud api-key create --description "Demo credentials for user $CCLOUD_EMAIL and schema registry $SR_ID" --resource $SR_ID)
+    local status=$?
+    echo "$output"
+    if [[ $status != 0 ]]; then
+        echo "Failed to create an API key for schema registry $SR_ID.  Please troubleshoot and run again"
+        exit 1
+    fi
+    SR_API_KEY=$(echo "$output" | grep '| API Key' | awk '{print $5;}')
 }
 
 if [ "${BASH_SOURCE[0]}" == "$0" ]; then
