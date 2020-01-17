@@ -15,19 +15,26 @@ import java.util.concurrent.atomic.AtomicBoolean
 private val logger = LoggerFactory.getLogger("kafka-hackathon-jj-sda")
 
 fun main() {
-    val topic = "jj-sda-test"
-    val service = Executors.newFixedThreadPool(3)
+    val service = Executors.newCachedThreadPool()
 
     val recordsToProduce = 20
 
-    val consumer = Consumer(getClientProperties("Consumer-1"), topic, "Consumer-1")
+    val topic = "jj-sda-test"
+    val consumerGroup1 = "jj-sda-consumer-group-1"
+    val consumer = Consumer(topic, "Consumer-1", consumerGroup1)
     service.submit {
         consumer.consume()
     }
 
-    val consumer2 = Consumer(getClientProperties("Consumer-2"), topic, "Consumer-2")
+    val consumer2 = Consumer(topic, "Consumer-2", consumerGroup1)
     service.submit {
         consumer2.consume()
+    }
+
+    val consumerGroup2 = "jj-sda-consumer-group-2"
+    val consumer3 = Consumer(topic, "Consumer-3", consumerGroup2)
+    service.submit {
+        consumer3.consume()
     }
 
     val producer: Producer<String, String> = KafkaProducer(getProducerProperties())
@@ -58,6 +65,7 @@ fun main() {
     Thread.sleep(10000)
     stopConsumer(consumer)
     stopConsumer(consumer2)
+    stopConsumer(consumer3)
     service.shutdown()
 }
 
@@ -68,15 +76,15 @@ private fun stopConsumer(consumer: Consumer) {
 }
 
 private class Consumer(
-    private val props: Properties,
     private val topic: String,
-    private val consumerId: String
+    private val consumerId: String,
+    private val consumerGroupId: String
 ) {
     private val logger = LoggerFactory.getLogger(org.apache.kafka.clients.consumer.Consumer::class.java)
     private val isClosed = AtomicBoolean(false)
 
     fun consume() {
-        val consumer: org.apache.kafka.clients.consumer.Consumer<String, String> = KafkaConsumer(props)
+        val consumer: org.apache.kafka.clients.consumer.Consumer<String, String> = KafkaConsumer(getClientProperties(consumerId, consumerGroupId))
         consumer.subscribe(listOf(topic))
         while (!isClosed.get()) {
             val records: ConsumerRecords<String, String> = consumer.poll(Duration.ofMillis(100))
@@ -100,16 +108,16 @@ private class Consumer(
     }
 }
 
-fun getProducerProperties() = Properties(getCommonProperties()).also { props ->
+fun getProducerProperties() = Properties().also { props ->
     props.putAll(getCommonProperties())
     props["key.serializer"] = StringSerializer::class.java.name
     props["value.serializer"] = StringSerializer::class.java.name
 }
 
-fun getClientProperties(consumerId: String) = Properties().also { props ->
+fun getClientProperties(consumerId: String, groupId: String) = Properties().also { props ->
     props.putAll(getCommonProperties())
-    props["client.id"] = "jj-on-behalf-of-jj_sda_producer-consumer-example_$consumerId"
-    props["group.id"] = "jj-sda-consumer-group"
+    props["client.id"] = "jj_sda_producer-consumer-example_$consumerId"
+    props["group.id"] = groupId
     props["enable.auto.commit"] = "true"
     props["auto.commit.interval.ms"] = "1000"
     props["key.deserializer"] = StringDeserializer::class.java.name
