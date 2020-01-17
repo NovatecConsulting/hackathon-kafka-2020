@@ -55,7 +55,7 @@ fun main() {
         logger.debug("Closed producer")
     }
 
-    Thread.sleep(10000);
+    Thread.sleep(10000)
     stopConsumer(consumer)
     stopConsumer(consumer2)
     service.shutdown()
@@ -109,9 +109,9 @@ fun getProducerProperties() = Properties(getCommonProperties()).also { props ->
 fun getClientProperties(consumerId: String) = Properties().also { props ->
     props.putAll(getCommonProperties())
     props["client.id"] = "jj-on-behalf-of-jj_sda_producer-consumer-example_$consumerId"
-    props["group.id"] = "jj-sda-consumer-group";
+    props["group.id"] = "jj-sda-consumer-group"
     props["enable.auto.commit"] = "true"
-    props["auto.commit.interval.ms"] = "1000";
+    props["auto.commit.interval.ms"] = "1000"
     props["key.deserializer"] = StringDeserializer::class.java.name
     props["value.deserializer"] = StringDeserializer::class.java.name
 }
