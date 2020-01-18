@@ -13,7 +13,7 @@ services:
       - schemaregistry1
       - schemaregistry2
     ports:
-      - "8088"
+      - "18088-18188:8088"
     volumes:
       - ./configs/ksqldb-server/ext:/etc/ksql/ext
     # https://docs.ksqldb.io/en/latest/operate-and-deploy/installation/server-config/config-reference/      

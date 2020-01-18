@@ -12,17 +12,19 @@ services:
       - kafka3  
     ports:
       - "18081:8081"
+    # https://docs.confluent.io/current/schema-registry/installation/config.html  
     environment:
-      SCHEMA_REGISTRY_HOST_NAME: "schemaregistry1"
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka:9092"
-      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: "full_transitive"
-      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true"
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry1 # The advertised host name. 
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081 # (default: http://0.0.0.0:8081) Comma-separated list of listeners that listen for API requests
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092 # A list of Kafka brokers to connect. If kafkastore.connection.url is not specified, the Kafka cluster containing these bootstrap servers is used both to coordinate Schema Registry instances (primary election) and to store schema data.
+      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true" # (default: true) If true, this node can participate in primary election.
+      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: full_transitive # (default: backward) The Avro compatibility type
       # The group id of the KafkaStore consumer. Important when security is enabled. 
       #SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID: ""
       # Identifies schema registry cluster, in which each cluster can haf it's own master. 
       # Different clustery must have a distinct kafkastore.topic if master.eligibility is set to true.
       #SCHEMA_REGISTRY_SCHEMA_REGISTRY_GROUP_ID: ""
-      #SCHEMA_REGISTRY_KAFKASTORE_TOPIC: "_schemas"
+      #SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
     networks:
       default:
         aliases:
@@ -38,17 +40,19 @@ services:
       - kafka3  
     ports:
       - "28081:8081"
+    # https://docs.confluent.io/current/schema-registry/installation/config.html
     environment:
-      SCHEMA_REGISTRY_HOST_NAME: "schemaregistry2"
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka:9092"
-      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: "full_transitive"
-      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true"
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry2 # The advertised host name. 
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081 # (default: http://0.0.0.0:8081) Comma-separated list of listeners that listen for API requests
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092 # A list of Kafka brokers to connect. If kafkastore.connection.url is not specified, the Kafka cluster containing these bootstrap servers is used both to coordinate Schema Registry instances (primary election) and to store schema data.
+      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true" # (default: true) If true, this node can participate in primary election.
+      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: full_transitive # (default: backward) The Avro compatibility type
       # The group id of the KafkaStore consumer. Important when security is enabled. 
       #SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID: ""
       # Identifies schema registry cluster, in which each cluster can haf it's own master. 
       # Different clustery must have a distinct kafkastore.topic if master.eligibility is set to true.
       #SCHEMA_REGISTRY_SCHEMA_REGISTRY_GROUP_ID: ""
-      #SCHEMA_REGISTRY_KAFKASTORE_TOPIC: "_schemas"
+      #SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
     networks:
       default:
         aliases:
