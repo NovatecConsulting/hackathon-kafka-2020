@@ -1,0 +1,5 @@
+= Extension Directory for UDFs
+
+When you create a custom user-defined function (UDF), you implement it in Java and deploy it as a JAR to the ksql extensions directory (see https://docs.ksqldb.io/en/latest/developer-guide/implement-a-udf/).
+
+In order to use it in this Docker environmet, add these JAR files to this directory. It is mounted to `/etc/ksql/ext/` in the `ksqldb-server` containers.

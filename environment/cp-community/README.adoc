@@ -14,7 +14,7 @@ This folder contains a Docker-Compose environment with all components of the Con
 - Kafka (confluentinc/cp-kafka) in cluster mode
 - Schema Registry (confluentinc/cp-schema-registry) in cluster mode
 - Kafka Connect (confluentinc/cp-kafka-connect) // Not included in environment until now!
-- kSqlDB Server (confluentinc/ksqldb-server)
+- kSqlDB Server (confluentinc/ksqldb-server) in cluster mode
 
 For more information see: https://docs.confluent.io/{cp-version}/installation/docker/image-reference.html
 

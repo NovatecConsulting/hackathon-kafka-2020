@@ -1,5 +1,5 @@
 ---
-version: '2'
+version: '2.2'
 services:
   #see https://docs.confluent.io/current/schema-registry/installation/config.html
   schemaregistry1:

@@ -1,32 +1,53 @@
 ---
-version: '2'
+version: '2.2'
 services:
-    # https://ksqldb.io/ (https://hub.docker.com/r/confluentinc/ksqldb-server)
+  # https://ksqldb.io/
   ksqldb-server:
-    image: confluentinc/ksqldb-server:${VERSION_KSQLDB}
+    image: confluentinc/ksqldb-server:${VERSION_KSQLDB} #https://hub.docker.com/r/confluentinc/ksqldb-server
+    scale: 3
     restart: unless-stopped
-    hostname: ksqldb-server
     depends_on:
       - kafka1
       - kafka2
-      - kafka3  
+      - kafka3 
+      - schemaregistry1
+      - schemaregistry2
     ports:
-      - "18088:8088"
+      - "8088"
+    volumes:
+      - ./configs/ksqldb-server/ext:/etc/ksql/ext
+    # https://docs.ksqldb.io/en/latest/operate-and-deploy/installation/server-config/config-reference/      
     environment:
-      KSQL_HOST_NAME: ksqldb-server
-      KSQL_LISTENERS: "http://0.0.0.0:8088"
-      KSQL_BOOTSTRAP_SERVERS: kafka:9092
-      KSQL_KSQL_SCHEMA_REGISTRY_URL: http://schemaregistry:8081
-      KSQL_AUTO_OFFSET_RESET: "earliest"
-      KSQL_COMMIT_INTERVAL_MS: 0
-      KSQL_CACHE_MAX_BYTES_BUFFERING: 0
-      KSQL_KSQL_STREAMS_REPLICATION_FACTOR: 3
-      KSQL_KSQL_INTERNAL_TOPIC_REPLICAS: 3
-      KSQL_KSQL_SINK_REPLICAS: 3
+      ## Kafka Streams and Kafka Client Settings 
+      ## https://docs.ksqldb.io/en/latest/operate-and-deploy/installation/server-config/config-reference/#kafka-streams-and-kafka-client-settings
+      KSQL_BOOTSTRAP_SERVERS: kafka:9092 # (default: localhost:9092) list of host and port pairs that is used for establishing the initial connection to the Kafka cluster
+      KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: "earliest" # (default: latest) determines what to do when there is no initial offset in Apache Kafka
+      KSQL_KSQL_STREAMS_NUM_STREAM_THREADS: 1 # (default: 1) number of stream threads in an instance of the Kafka Streams application
+      KSQL_KSQL_STREAMS_PRODUCER_DELIVERY_TIMEOUT_MS: 2147483647 # (default: 120000) Set the batch expiry to Integer.MAX_VALUE to ensure that queries will not terminate if the underlying Kafka cluster is unavailable
+      KSQL_KSQL_STREAMS_PRODUCER_MAX_BLOCK_MS: 9223372036854775807 # (default: 60000) Set the maximum allowable time for the producer to block to Long.MAX_VALUE. This allows ksqlDB to pause processing if the underlying Kafka cluster is unavailable. 
+      KSQL_KSQL_STREAMS_COMMIT_INTERVAL_MS: 2000 # (default: 2000) frequency to save the position of the processor
+      KSQL_KSQL_STREAMS_CACHE_MAX_BYTES_BUFFERING: 10000000 # (default: 10000000) maximum number of memory bytes to be used for buffering across all threads   
+      # Configure underlying Kafka Streams internal topics to achieve better fault tolerance and durability, even in the face of Kafka broker failures.
+      KSQL_KSQL_STREAMS_PRODUCER_ACKS: all # (default: 1)
+      KSQL_KSQL_STREAMS_REPLICATION_FACTOR: 3 # (default: 1)
+      KSQL_KSQL_STREAMS_TOPIC_MIN_INSYNC_REPLICAS: 2 # (default: 1)
+      KSQL_KSQL_STREAMS_NUM_STANDBY_REPLICAS: 1 # (default: 1) the number of replicas for state storage for stateful operations. By having two replicas recovery from node failures is quicker. Essential for pull queries to be highly available during node failures
+      ## ksqlDB Query Settings
+      ## https://docs.ksqldb.io/en/latest/operate-and-deploy/installation/server-config/config-reference/#ksqldb-query-settings
+      KSQL_KSQL_SERVICE_ID: interactive_ # (default: default_) used to define the ksqlDB cluster membership of a ksqlDB Server instance
+      KSQL_KSQL_OUTPUT_TOPIC_NAME_PREFIX: ksql-interactive- # default prefix for automatically created topic names
+      KSQL_KSQL_INTERNAL_TOPIC_REPLICAS: 3 # (default: 1) number of replicas for the internal topics created by ksqlDB Server
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: http://schemaregistry:8081 # Schema Registry URL path to connect ksqlDB to
+      ## ksqlDB Server Settings
+      ## https://docs.ksqldb.io/en/latest/operate-and-deploy/installation/server-config/config-reference/#ksqldb-server-settings
+      KSQL_LISTENERS: "http://0.0.0.0:8088" # (default: http://0.0.0.0:8088) controls the REST API endpoint for the ksqlDB Server
+      KSQL_KSQL_STREAMS_STATE_DIR: /tmp/kafka-streams # (default: /tmp/kafka-streams) the storage directory for stateful operations, like aggregations and joins
+      KSQL_KSQL_EXTENSION_DIR: /etc/ksql/ext # extension directory for UDFs, see https://docs.ksqldb.io/en/latest/developer-guide/implement-a-udf/
+      KSQL_CONFLUENT_SUPPORT_METRICS_ENABLE: "false" # (default: true) with this enabled, this instance is configured to collect and report anonymously the version information to Confluent
 
   ksqldb-cli:
     image: confluentinc/ksqldb-cli:${VERSION_KSQLDB}
-    hostname: ksqldb-cli
+    restart: unless-stopped
     depends_on:
       - ksqldb-server
     entrypoint: /bin/bash

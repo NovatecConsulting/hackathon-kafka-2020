@@ -55,7 +55,7 @@ function test_kafka_latency () {
     log "INFO" "Perform latency test"
     local topic=latencytopic
     createTopic ${topic}
-    time run_kafka_cmd kafka-run-class kafka.tools.EndToEndLatency ${BOOTSTRAP_SERVER} ${topic} 5000 all 1024
+    time run_kafka_cmd kafka-run-class kafka.tools.EndToEndLatency ${BOOTSTRAP_SERVER} ${topic} 2000 all 1024
     local returnCode=$?
     [ $returnCode -eq 0 ] && log "INFO" "ok" || log "ERROR" "nok|Failed to perform latency test"
     deleteTopic ${topic}
@@ -66,7 +66,7 @@ function test_kafka_throughput () {
     log "INFO" "Perform producer throughput test"
     local topic=throughputtopic
     createTopic ${topic}
-    time run_kafka_cmd kafka-producer-perf-test --topic ${topic} --num-records 20000 --record-size 1024 --throughput -1 --producer-props bootstrap.servers=${BOOTSTRAP_SERVER} retries=3 batch.size=1 max.in.flight.requests.per.connection=1 acks=-1
+    time run_kafka_cmd kafka-producer-perf-test --topic ${topic} --num-records 5000 --record-size 1024 --throughput -1 --producer-props bootstrap.servers=${BOOTSTRAP_SERVER} retries=3 batch.size=1 max.in.flight.requests.per.connection=1 acks=-1
     local returnCode=$?
     [ $returnCode -eq 0 ] && log "INFO" "ok" || log "ERROR" "nok|ailed to perform producer throughput test"
     deleteTopic ${topic}
